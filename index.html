@@ -371,6 +371,10 @@
   }
   .questions-list{ display:flex; flex-direction:column; gap:6px; max-height:320px; overflow-y:auto; padding-right:4px; }
   .question-row{ display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line); background:var(--bg-card); }
+  .question-order{ display:flex; flex-direction:column; gap:2px; flex-shrink:0; }
+  .q-move{ background:none; border:1px solid var(--line-bright); color:var(--ink-dim); font-size:10px; line-height:1; padding:2px 6px; cursor:pointer; }
+  .q-move:hover:not(:disabled){ border-color:var(--accent-bright); color:var(--accent-bright); }
+  .q-move:disabled{ opacity:.3; cursor:default; }
   .question-check{ display:flex; align-items:center; gap:9px; flex:1; min-width:0; font-size:12.5px; color:var(--ink); cursor:pointer; }
   .question-check input{ accent-color:var(--accent-bright); flex-shrink:0; }
   .question-check span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -822,8 +826,12 @@
     const u = activeUniverse();
     ensureQuestions(u);
     const list = document.getElementById('questionsList');
-    list.innerHTML = u.questions.map(q => `
+    list.innerHTML = u.questions.map((q,i) => `
       <div class="question-row">
+        <div class="question-order">
+          <button type="button" class="q-move" data-dir="up" data-qid="${escapeAttr(q.id)}" ${i===0?'disabled':''} title="Move up">▲</button>
+          <button type="button" class="q-move" data-dir="down" data-qid="${escapeAttr(q.id)}" ${i===u.questions.length-1?'disabled':''} title="Move down">▼</button>
+        </div>
         <label class="question-check">
           <input type="checkbox" class="q-toggle" data-qid="${escapeAttr(q.id)}" ${q.enabled!==false?'checked':''} ${q.locked?'disabled':''}>
           <span>${escapeHtml(q.label)}</span>
@@ -832,6 +840,16 @@
         ${q.builtin ? '' : `<button type="button" class="q-delete" data-qid="${escapeAttr(q.id)}" title="Delete question">✕</button>`}
       </div>
     `).join('');
+    list.querySelectorAll('.q-move').forEach(btn=>btn.addEventListener('click', ()=>{
+      const idx = u.questions.findIndex(x=>x.id===btn.dataset.qid);
+      const swapWith = btn.dataset.dir === 'up' ? idx - 1 : idx + 1;
+      if(idx < 0 || swapWith < 0 || swapWith >= u.questions.length) return;
+      [u.questions[idx], u.questions[swapWith]] = [u.questions[swapWith], u.questions[idx]];
+      persist();
+      renderQuestionsList();
+      renderFilters();
+      render();
+    }));
     list.querySelectorAll('.q-toggle').forEach(cb=>cb.addEventListener('change', ()=>{
       const q = u.questions.find(x=>x.id===cb.dataset.qid);
       if(q) q.enabled = cb.checked;
