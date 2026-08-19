@@ -461,6 +461,12 @@
     </div>
     <div class="modal-body">
       <div class="settings-section">
+        <h3>Universe Name</h3>
+        <div class="field" style="margin-bottom:0">
+          <input type="text" id="settingsNameInput" placeholder="Universe name">
+        </div>
+      </div>
+      <div class="settings-section">
         <h3>Theme</h3>
         <div id="settingsThemeGrid" class="theme-grid"></div>
       </div>
@@ -499,6 +505,7 @@
       </div>
     </div>
     <div class="modal-foot">
+      <button class="btn-danger" id="deleteUniverseBtn">Delete Universe</button>
       <span style="flex:1"></span>
       <button class="btn" data-close-settings>Done</button>
     </div>
@@ -846,6 +853,8 @@
     const u = activeUniverse();
     ensureQuestions(u);
     document.getElementById('settingsUniverseName').textContent = u.name;
+    document.getElementById('settingsNameInput').value = u.name;
+    document.getElementById('deleteUniverseBtn').style.display = universes.length > 1 ? '' : 'none';
     renderSettingsThemeGrid();
     renderQuestionsList();
     document.getElementById('addQuestionPanel').style.display='none';
@@ -860,6 +869,47 @@
   document.getElementById('settingsBtn').addEventListener('click', openSettings);
   document.querySelectorAll('[data-close-settings]').forEach(b=>b.addEventListener('click', closeSettings));
   settingsOverlay.addEventListener('click', e=>{ if(e.target===settingsOverlay) closeSettings(); });
+
+  function renameActiveUniverse(){
+    const u = activeUniverse();
+    const newName = document.getElementById('settingsNameInput').value.trim();
+    if(!newName || newName === u.name) { document.getElementById('settingsNameInput').value = u.name; return; }
+    u.name = newName;
+    persist();
+    document.getElementById('settingsUniverseName').textContent = u.name;
+    renderUniverseButton();
+    showToast('Universe renamed to ' + u.name + '.');
+  }
+  document.getElementById('settingsNameInput').addEventListener('change', renameActiveUniverse);
+  document.getElementById('settingsNameInput').addEventListener('keydown', e=>{
+    if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('settingsNameInput').blur(); }
+  });
+
+  document.getElementById('deleteUniverseBtn').addEventListener('click', ()=>{
+    if(universes.length <= 1){ showToast('You need at least one universe.'); return; }
+    const u = activeUniverse();
+    const count = characters.length;
+    const warning = 'Permanently delete "' + u.name + '"' + (count ? ' and its ' + count + ' character' + (count===1?'':'s') : '') + '? This cannot be undone.';
+    if(!confirm(warning)) return;
+    saveCurrentUniverse();
+    universes = universes.filter(x => x.id !== u.id);
+    activeUniverseId = universes[0].id;
+    const next = activeUniverse();
+    ensureQuestions(next);
+    characters = Array.isArray(next.characters) ? next.characters : [];
+    normalizeCharacterData();
+    normalizeRelations();
+    applyTheme(next.theme || 'apple2');
+    persist();
+    closeSettings();
+    closeForm();
+    closeDetail();
+    renderUniverseList();
+    renderUniverseButton();
+    renderFilters();
+    render();
+    showToast('Universe deleted — switched to ' + next.name + '.');
+  });
 
   document.getElementById('addQuestionBtn').addEventListener('click', ()=>{
     document.getElementById('addQuestionPanel').style.display='';
