@@ -8,21 +8,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-void:#0a0c09;
-    --bg-panel:#12150f;
-    --bg-card:#171b13;
-    --bg-card-hover:#1d2317;
-    --ink:#d9e3c8;
-    --ink-dim:#8b9678;
-    --ink-faint:#565f47;
-    --accent:#5c8a45;
-    --accent-bright:#9fce77;
-    --stamp-red:#a13a2f;
-    --stamp-red-bright:#c94a3a;
-    --line:#2a2f21;
-    --line-bright:#3d4530;
-    --paper:#e8e2c9;
-    --shadow:rgba(0,0,0,0.6);
+    --bg-void:#020a03;
+    --bg-panel:#061207;
+    --bg-card:#031006;
+    --bg-card-hover:#071b0a;
+    --ink:#8cff8c;
+    --ink-dim:#4fbd55;
+    --ink-faint:#28732f;
+    --accent:#39ff5a;
+    --accent-bright:#8cff8c;
+    --stamp-red:#39b94a;
+    --stamp-red-bright:#7dff87;
+    --line:#12461a;
+    --line-bright:#1c6926;
+    --paper:#b7ffb7;
+    --shadow:rgba(0,0,0,0.8);
   }
 
   *{box-sizing:border-box;}
@@ -30,10 +30,10 @@
   body{
     margin:0;
     background:
-      radial-gradient(ellipse at top left, #14170f 0%, var(--bg-void) 55%),
+      radial-gradient(ellipse at top left, #14100e 0%, var(--bg-void) 55%),
       repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
     color:var(--ink);
-    font-family:'IBM Plex Mono', monospace;
+    font-family:'Courier New', 'Lucida Console', monospace;
     min-height:100vh;
   }
 
@@ -47,7 +47,7 @@
     border-bottom:1px solid var(--line-bright);
     padding:28px clamp(16px,4vw,56px) 20px;
     display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap;
-    background:linear-gradient(180deg, rgba(92,138,69,0.06), transparent);
+    background:linear-gradient(180deg, rgba(138, 97, 69, 0.06), transparent);
   }
   .brand-eyebrow{
     font-size:11px; letter-spacing:0.28em; color:var(--accent-bright); text-transform:uppercase; margin:0 0 6px;
@@ -56,7 +56,7 @@
     font-family:'Special Elite', monospace;
     font-size:clamp(24px,3.4vw,34px);
     margin:0; color:var(--paper); letter-spacing:0.03em;
-    text-shadow:0 0 18px rgba(159,206,119,0.15);
+    text-shadow:0 0 18px rgba(206, 168, 119, 0.15);
   }
   .subhead{ color:var(--ink-dim); font-size:12.5px; margin-top:6px; max-width:52ch; line-height:1.5;}
   .header-right{ display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
@@ -68,7 +68,7 @@
   button{ font-family:inherit; cursor:pointer; }
 
   .btn{
-    background:var(--accent); color:#0d1108; border:none; padding:10px 18px;
+    background:var(--accent); color:#110c08; border:none; padding:10px 18px;
     font-size:12.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
     box-shadow:2px 2px 0 rgba(0,0,0,0.5); transition:transform .12s, box-shadow .12s;
   }
@@ -112,7 +112,7 @@
     border:1px dashed var(--line-bright); padding:48px 24px; text-align:center; color:var(--ink-faint);
     font-size:13px; line-height:1.7;
   }
-  .empty-state strong{ color:var(--ink-dim); display:block; font-family:'Special Elite',monospace; font-size:15px; margin-bottom:6px;}
+  .empty-state strong{ color:var(--ink-dim); display:block; font-family:'Courier New', 'Lucida Console', monospace; font-size:15px; margin-bottom:6px;}
 
   .folder{
     position:relative; background:var(--bg-card); border:1px solid var(--line);
@@ -130,21 +130,21 @@
     border-bottom:1px solid var(--line);
   }
   .folder-body{ padding:12px 14px 14px; flex:1; display:flex; flex-direction:column; gap:6px;}
-  .folder-name{ font-family:'Special Elite',monospace; font-size:15px; color:var(--paper); line-height:1.3;}
+  .folder-name{ font-family:'Courier New', 'Lucida Console', monospace; font-size:15px; color:var(--paper); line-height:1.3;}
   .folder-role{ font-size:11px; color:var(--accent-bright); letter-spacing:0.05em; text-transform:uppercase;}
   .folder-faction{ font-size:11px; color:var(--ink-faint);}
 
   .stamp{
     position:absolute; top:10px; right:10px; border:2px solid var(--stamp-red-bright); color:var(--stamp-red-bright);
-    font-family:'Special Elite',monospace; font-size:10px; letter-spacing:0.1em; padding:3px 7px;
+    font-family:'Courier New', 'Lucida Console', monospace; font-size:10px; letter-spacing:0.1em; padding:3px 7px;
     transform:rotate(8deg); opacity:0.85; text-transform:uppercase; background:rgba(161,58,47,0.06);
   }
-  .stamp.status-active{ border-color:var(--accent-bright); color:var(--accent-bright); background:rgba(159,206,119,0.06);}
+  .stamp.status-active{ border-color:var(--accent-bright); color:var(--accent-bright); background:rgba(206, 151, 119, 0.06);}
   .stamp.status-unknown{ border-color:var(--ink-faint); color:var(--ink-faint); background:rgba(255,255,255,0.02);}
 
   /* ---------- Modal shared ---------- */
   .overlay{
-    position:fixed; inset:0; background:rgba(5,6,4,0.78); display:none; align-items:flex-start; justify-content:center;
+    position:fixed; inset:0; background:rgba(6, 5, 4, 0.78); display:none; align-items:flex-start; justify-content:center;
     padding:40px 16px; overflow-y:auto; z-index:100; backdrop-filter:blur(2px);
   }
   .overlay.open{ display:flex; }
@@ -155,9 +155,9 @@
   @keyframes rise{ from{ opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
   .modal-head{
     display:flex; justify-content:space-between; align-items:center; padding:16px 20px;
-    border-bottom:1px solid var(--line); background:linear-gradient(180deg, rgba(92,138,69,0.08), transparent);
+    border-bottom:1px solid var(--line); background:linear-gradient(180deg, rgba(138, 100, 69, 0.08), transparent);
   }
-  .modal-head h2{ font-family:'Special Elite',monospace; font-size:17px; margin:0; color:var(--paper); letter-spacing:0.02em;}
+  .modal-head h2{ font-family:'Courier New', 'Lucida Console', monospace; font-size:17px; margin:0; color:var(--paper); letter-spacing:0.02em;}
   .close-x{ background:none; border:none; color:var(--ink-faint); font-size:20px; line-height:1; padding:4px 8px; }
   .close-x:hover{ color:var(--stamp-red-bright); }
   .modal-body{ padding:20px; max-height:72vh; overflow-y:auto; }
@@ -185,7 +185,67 @@
   .radio-group input{ accent-color:var(--accent-bright); }
   .control-dynamic-note{
     font-size:11.5px; color:var(--ink-dim); border-left:2px solid var(--accent); padding:8px 10px;
-    background:rgba(92,138,69,0.06); margin-top:8px; line-height:1.5;
+    background:rgba(138, 100, 69, 0.06); margin-top:8px; line-height:1.5;
+  }
+
+
+  .relations-picker{
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .relation-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 150px auto;
+    gap:8px;
+    align-items:center;
+  }
+  .relation-row select,.relation-row button{
+    width:100%;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    color:var(--ink);
+    padding:8px;
+    font-family:inherit;
+    font-size:11px;
+  }
+  .relation-row button{
+    width:auto;
+    color:var(--accent-bright);
+    cursor:pointer;
+  }
+  .relations-empty{ color:var(--ink-faint); font-size:11px; padding:4px; }
+  .relation-link{
+    background:none;
+    border:0;
+    padding:0;
+    color:var(--accent-bright);
+    font:inherit;
+    text-decoration:underline;
+    text-decoration-style:dotted;
+    cursor:pointer;
+  }
+  .relation-link:hover{ text-shadow:0 0 8px rgba(57,255,90,.65); }
+
+  .relationship-network{border:1px solid var(--line-bright);background:linear-gradient(90deg,rgba(57,255,90,.055),rgba(57,255,90,.015));padding:12px;box-shadow:inset 0 0 18px rgba(57,255,90,.025)}
+  .relationship-network-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+  .relationship-network-title{color:var(--accent-bright);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 0 7px rgba(57,255,90,.45)}
+  .relationship-count{color:var(--ink-faint);font-size:10px}
+  .relationship-list{display:flex;flex-direction:column;gap:7px}
+  .relationship-card{display:grid;grid-template-columns:100px minmax(0,1fr);align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);background:var(--bg-card)}
+  .relationship-type{color:var(--ink-dim);font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+  .relationship-person{color:var(--accent-bright);font-size:12px;font-weight:600}
+  .relationship-person:hover{text-shadow:0 0 9px rgba(57,255,90,.7)}
+  .relationship-empty{color:var(--ink-faint);font-size:11px;line-height:1.5}
+  @media(max-width:520px){.relationship-card{grid-template-columns:1fr;gap:3px}}
+
+
+  @media(max-width:520px){
+    .relation-row{ grid-template-columns:1fr; }
+    .relation-row button{ width:100%; }
   }
 
   /* ---------- Detail view ---------- */
@@ -200,7 +260,7 @@
   }
   .detail-section{ margin-bottom:18px; }
   .detail-section h3{
-    font-family:'Special Elite',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    font-family:'Courier New', 'Lucida Console', monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
     color:var(--accent-bright); margin:0 0 8px; border-bottom:1px dashed var(--line-bright); padding-bottom:6px;
   }
   .detail-section p{ margin:0; font-size:13px; line-height:1.7; color:var(--ink); white-space:pre-wrap; }
@@ -223,6 +283,60 @@
   ::-webkit-scrollbar{ width:9px; }
   ::-webkit-scrollbar-track{ background:var(--bg-void); }
   ::-webkit-scrollbar-thumb{ background:var(--line-bright); }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:998;
+    background:repeating-linear-gradient(
+      0deg,
+      rgba(120,255,120,.045) 0px,
+      rgba(120,255,120,.045) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode:screen;
+  }
+
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:997;
+    box-shadow:inset 0 0 90px rgba(0,0,0,.85);
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.28) 100%);
+  }
+
+  .noise{ opacity:.055; }
+
+  h1,.brand-eyebrow,.btn,.btn-ghost,.btn-danger,.folder-name,.modal-head h2,
+  .detail-section h3,.count-chip,.tag{
+    text-shadow:0 0 7px rgba(57,255,90,.45);
+  }
+
+  input,select,textarea,.modal,.folder,.btn,.btn-ghost{
+    border-radius:0 !important;
+  }
+
+  input,select,textarea{
+    box-shadow:inset 0 0 12px rgba(57,255,90,.035);
+  }
+
+  .folder:hover{
+    box-shadow:0 0 18px rgba(57,255,90,.12);
+  }
+
+  @keyframes crtFlicker{
+    0%, 100%{opacity:1}
+    48%{opacity:.985}
+    50%{opacity:.965}
+    52%{opacity:.995}
+  }
+  body{ animation:crtFlicker 5s infinite; }
+
 </style>
 </head>
 <body>
@@ -308,6 +422,49 @@
           <input type="text" id="f-entity" placeholder="the demon/angel occupying this body, if any">
         </div>
 
+        <div class="row2">
+          <div class="field">
+            <label for="f-age-real">Age</label>
+            <input type="number" id="f-age-real" min="0" max="999" placeholder="e.g. 27">
+          </div>
+          <div class="field">
+            <label for="f-gender">Gender</label>
+            <select id="f-gender">
+              <option value="">Not specified</option>
+              <option>Female</option>
+              <option>Male</option>
+              <option>Non-binary</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-eye-color">Eye Color</label>
+          <input type="text" id="f-eye-color" placeholder="e.g. Emerald green, amber, pale blue">
+        </div>
+
+        <div class="field">
+          <label for="f-languages">Languages Spoken</label>
+          <textarea id="f-languages" placeholder="One per line — e.g.&#10;English&#10;Dutch&#10;French"></textarea>
+          <div class="hint">Add every language this character can speak. One language per line.</div>
+        </div>
+
+        <div class="field">
+          <label>Origin</label>
+          <div class="row2">
+            <input type="text" id="f-city" placeholder="City">
+            <input type="text" id="f-district" placeholder="District / Country">
+          </div>
+          <div class="hint">Districts are treated as countries within the Tales of the Damned setting.</div>
+        </div>
+
+        <div class="field">
+          <label>Relations</label>
+          <div id="relationsPicker" class="relations-picker"></div>
+          <div class="hint">Connect this character to other created characters. You can choose the relationship type for each connection.</div>
+        </div>
+
         <div class="field" id="ageField">
           <label>Possession Age</label>
           <div class="radio-group">
@@ -368,7 +525,7 @@
 
 <!-- Detail Modal -->
 <div class="overlay" id="detailOverlay">
-  <div class="modal" style="max-width:600px">
+  <div class="modal" style="max-width:680px">
     <div class="modal-head">
       <h2 id="detailName">—</h2>
       <button class="close-x" data-close-detail>&times;</button>
@@ -388,7 +545,7 @@
 (function(){
   "use strict";
 
-  const STORAGE_KEY = "totd_characters_v1";
+  const STORAGE_KEY = "totd_characters_v2";
   let characters = [];
   let editingId = null;
   let activeDetailId = null;
@@ -432,7 +589,7 @@
     if(role && c.role !== role) return false;
     if(status && c.status !== status) return false;
     if(q){
-      const hay = [c.name, c.alias, c.entity, c.faction, c.bio].join(' ').toLowerCase();
+      const hay = [c.name, c.alias, c.entity, c.faction, c.bio, c.eyeColor, c.city, c.district, c.gender, ...(c.languages || [])].join(' ').toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
@@ -463,6 +620,8 @@
           <div class="folder-name">${escapeHtml(c.name)}</div>
           ${c.alias ? `<div class="folder-role">"${escapeHtml(c.alias)}"</div>` : `<div class="folder-role">${escapeHtml(c.entity || c.role)}</div>`}
           <div class="folder-faction">${escapeHtml(c.faction || 'No affiliation on file')}</div>
+          ${c.city || c.district ? `<div class="folder-faction">${escapeHtml([c.city,c.district].filter(Boolean).join(' · '))}</div>` : ''}
+          ${c.languages?.length ? `<div class="folder-faction">${c.languages.length} language${c.languages.length === 1 ? '' : 's'}</div>` : ''}
         </div>
       </div>
     `).join('');
@@ -503,6 +662,152 @@
   const detailOverlay = document.getElementById('detailOverlay');
   const charForm = document.getElementById('charForm');
 
+
+  const relationTypes = [
+    "Friend", "Family", "Parent", "Child", "Sibling", "Partner",
+    "Enemy", "Rival", "Ally", "Colleague", "Mentor", "Student", "Other"
+  ];
+
+  // When a relation is saved, the other character gets the matching
+  // reciprocal relation automatically.
+  const reciprocalRelation = {
+    "Parent": "Child",
+    "Child": "Parent",
+    "Mentor": "Student",
+    "Student": "Mentor",
+    "Friend": "Friend",
+    "Family": "Family",
+    "Sibling": "Sibling",
+    "Partner": "Partner",
+    "Enemy": "Enemy",
+    "Rival": "Rival",
+    "Ally": "Ally",
+    "Colleague": "Colleague",
+    "Other": "Other"
+  };
+
+  function renderRelationsPicker(relations){
+    const wrap = document.getElementById('relationsPicker');
+    const usable = (relations || []).filter(r => characters.some(c => c.id === r.id));
+
+    if(!characters.length || characters.length < 2){
+      wrap.innerHTML = '<div class="relations-empty">Create at least two characters to connect relations.</div>';
+      return;
+    }
+
+    wrap.innerHTML = '';
+    usable.forEach(r => addRelationRow(r.id, r.type, wrap));
+
+    const add = document.createElement('button');
+    add.type = 'button';
+    add.className = 'btn-ghost';
+    add.textContent = '+ Connect Character';
+    add.addEventListener('click', () => addRelationRow('', 'Friend', wrap));
+    wrap.appendChild(add);
+  }
+
+  function addRelationRow(selectedId='', selectedType='Friend', wrap=document.getElementById('relationsPicker')){
+    const row = document.createElement('div');
+    row.className = 'relation-row';
+
+    const people = characters.filter(c => c.id !== editingId);
+    const options = people.map(c =>
+      `<option value="${escapeAttr(c.id)}" ${c.id === selectedId ? 'selected' : ''}>${escapeHtml(c.name)}</option>`
+    ).join('');
+
+    const typeOptions = relationTypes.map(t =>
+      `<option ${t === selectedType ? 'selected' : ''}>${escapeHtml(t)}</option>`
+    ).join('');
+
+    row.innerHTML = `
+      <select class="relation-person">
+        <option value="">Select character...</option>
+        ${options}
+      </select>
+      <select class="relation-type">${typeOptions}</select>
+      <button type="button" class="btn-ghost remove-relation">Remove</button>
+    `;
+
+    row.querySelector('.remove-relation').addEventListener('click', () => row.remove());
+
+    const addButton = wrap.querySelector('.btn-ghost:last-child');
+    wrap.insertBefore(row, addButton || null);
+  }
+
+  function collectRelations(){
+    return [...document.querySelectorAll('#relationsPicker .relation-row')].map(row => ({
+      id: row.querySelector('.relation-person').value,
+      type: row.querySelector('.relation-type').value
+    })).filter(r => r.id);
+  }
+
+  function normalizeCharacterData(){
+    characters.forEach(c => {
+      if(!Array.isArray(c.relations)) c.relations = [];
+      if(!Array.isArray(c.languages)){
+        c.languages = c.languages
+          ? String(c.languages).split(/\n|,/).map(s=>s.trim()).filter(Boolean)
+          : [];
+      }
+      if(c.ageReal === undefined) c.ageReal = null;
+      if(c.gender === undefined) c.gender = '';
+      if(c.eyeColor === undefined) c.eyeColor = '';
+      if(c.city === undefined) c.city = '';
+      if(c.district === undefined) c.district = '';
+    });
+  }
+
+  function normalizeRelations(){
+    characters.forEach(c => {
+      if(!Array.isArray(c.relations)) c.relations = [];
+    });
+  }
+
+  function relationExists(character, targetId, type){
+    return character.relations.some(r => r.id === targetId && r.type === type);
+  }
+
+  function removeRelation(character, targetId, type){
+    character.relations = (character.relations || []).filter(
+      r => !(r.id === targetId && r.type === type)
+    );
+  }
+
+  function syncRelationsForCharacter(characterId, oldRelations, newRelations){
+    normalizeRelations();
+
+    const character = characters.find(c => c.id === characterId);
+    if(!character) return;
+
+    // Remove reciprocal links created by this character's previous relations.
+    (oldRelations || []).forEach(r => {
+      const other = characters.find(c => c.id === r.id);
+      if(!other) return;
+      const reverse = reciprocalRelation[r.type] || r.type;
+      other.relations = (other.relations || []).filter(
+        x => !(x.id === characterId && x.type === reverse)
+      );
+    });
+
+    // Store this character's new relation list.
+    character.relations = (newRelations || [])
+      .filter(r => r.id && r.id !== characterId)
+      .map(r => ({ id: r.id, type: r.type }));
+
+    // Add the reciprocal relation to the other character.
+    character.relations.forEach(r => {
+      const other = characters.find(c => c.id === r.id);
+      if(!other) return;
+
+      const reverse = reciprocalRelation[r.type] || r.type;
+      other.relations = other.relations || [];
+
+      if(!other.relations.some(x => x.id === characterId && x.type === reverse)){
+        other.relations.push({ id: characterId, type: reverse });
+      }
+    });
+  }
+
   function openForm(char){
     editingId = char ? char.id : null;
     document.getElementById('formTitle').textContent = char ? 'Edit Case File' : 'New Case File';
@@ -512,7 +817,14 @@
     document.getElementById('f-alias').value = char?.alias || '';
     document.getElementById('f-role').value = char?.role || 'Human';
     document.getElementById('f-entity').value = char?.entity || '';
+    document.getElementById('f-age-real').value = char?.ageReal ?? '';
+    document.getElementById('f-gender').value = char?.gender || '';
+    document.getElementById('f-eye-color').value = char?.eyeColor || '';
+    document.getElementById('f-languages').value = (char?.languages || []).join('\n');
+    document.getElementById('f-city').value = char?.city || '';
+    document.getElementById('f-district').value = char?.district || '';
     document.getElementById('f-faction').value = char?.faction || '';
+    renderRelationsPicker(char?.relations || []);
     document.getElementById('f-status').value = char?.status || 'Active';
     document.getElementById('f-photo').value = char?.photo || '';
     document.getElementById('f-abilities').value = (char?.abilities || []).join('\n');
@@ -528,7 +840,7 @@
     formOverlay.classList.add('open');
     document.getElementById('f-name').focus();
   }
-  function closeForm(){ formOverlay.classList.remove('open'); editingId = null; charForm.reset(); }
+  function closeForm(){ formOverlay.classList.remove('open'); editingId = null; charForm.reset(); document.getElementById('relationsPicker').innerHTML = ''; }
 
   document.getElementById('newBtn').addEventListener('click', ()=> openForm(null));
   document.querySelectorAll('[data-close-form]').forEach(b=>b.addEventListener('click', closeForm));
@@ -544,7 +856,14 @@
       role: document.getElementById('f-role').value,
       entity: document.getElementById('f-entity').value.trim(),
       age: ageChecked ? ageChecked.value : 'N/A',
+      ageReal: document.getElementById('f-age-real').value ? Number(document.getElementById('f-age-real').value) : null,
+      gender: document.getElementById('f-gender').value,
+      eyeColor: document.getElementById('f-eye-color').value.trim(),
+      languages: document.getElementById('f-languages').value.split('\n').map(s=>s.trim()).filter(Boolean),
+      city: document.getElementById('f-city').value.trim(),
+      district: document.getElementById('f-district').value.trim(),
       faction: document.getElementById('f-faction').value.trim(),
+      relations: collectRelations(),
       status: document.getElementById('f-status').value,
       photo: document.getElementById('f-photo').value.trim(),
       abilities: document.getElementById('f-abilities').value.split('\n').map(s=>s.trim()).filter(Boolean),
@@ -554,13 +873,21 @@
 
     if(editingId){
       const idx = characters.findIndex(c=>c.id === editingId);
-      if(idx > -1) characters[idx] = {...characters[idx], ...data};
-      showToast('Case file updated.');
+      if(idx > -1){
+        const oldRelations = Array.isArray(characters[idx].relations)
+          ? characters[idx].relations.map(r => ({...r}))
+          : [];
+        characters[idx] = {...characters[idx], ...data};
+        syncRelationsForCharacter(editingId, oldRelations, characters[idx].relations);
+      }
+      showToast('Case file updated — relations synchronized.');
     } else {
       data.id = uid();
       data.fileNo = String(characters.length + 1).padStart(3,'0');
+      data.relations = Array.isArray(data.relations) ? data.relations : [];
       characters.push(data);
-      showToast('New case file added to archive.');
+      syncRelationsForCharacter(data.id, [], data.relations);
+      showToast('New case file added — relations synchronized.');
     }
     persist();
     render();
@@ -570,7 +897,11 @@
   document.getElementById('deleteBtn').addEventListener('click', ()=>{
     if(!editingId) return;
     if(!confirm('Permanently delete this case file?')) return;
-    characters = characters.filter(c=>c.id !== editingId);
+    const deletedId = editingId;
+    characters.forEach(c => {
+      c.relations = (c.relations || []).filter(r => r.id !== deletedId);
+    });
+    characters = characters.filter(c=>c.id !== deletedId);
     persist();
     render();
     closeForm();
@@ -599,12 +930,43 @@
         ${c.age && c.age !== 'N/A' ? `<span class="tag">${c.age}</span>` : ''}
       </div>
       ${c.alias ? `<div class="detail-section"><h3>Alias</h3><p>${escapeHtml(c.alias)}</p></div>` : ''}
+      ${(c.ageReal != null || c.gender || c.eyeColor) ? `<div class="detail-section"><h3>Identity</h3><p>${[
+        c.ageReal != null ? 'Age: ' + escapeHtml(String(c.ageReal)) : '',
+        c.gender ? 'Gender: ' + escapeHtml(c.gender) : '',
+        c.eyeColor ? 'Eye color: ' + escapeHtml(c.eyeColor) : ''
+      ].filter(Boolean).join(' · ')}</p></div>` : ''}
+      ${c.languages?.length ? `<div class="detail-section"><h3>Languages</h3><ul class="ability-list">${c.languages.map(l => `<li>${escapeHtml(l)}</li>`).join('')}</ul></div>` : ''}
+      ${(c.city || c.district) ? `<div class="detail-section"><h3>Origin</h3><p>${escapeHtml([c.city,c.district].filter(Boolean).join(' · '))}</p></div>` : ''}
       ${c.entity ? `<div class="detail-section"><h3>Entity</h3><p>${escapeHtml(c.entity)}${c.age && c.age !== 'N/A' ? ' — ' + controlDynamics[c.age] : ''}</p></div>` : ''}
+      <div class="detail-section">
+        <div class="relationship-network">
+          <div class="relationship-network-head">
+            <div class="relationship-network-title">◈ Relationship Network</div>
+            <div class="relationship-count">${(c.relations || []).filter(r => characters.some(x => x.id === r.id)).length} connection${(c.relations || []).filter(r => characters.some(x => x.id === r.id)).length === 1 ? '' : 's'}</div>
+          </div>
+          <div class="relationship-list">
+            ${(c.relations || []).map(r => {
+              const person = characters.find(x => x.id === r.id);
+              return person ? `<div class="relationship-card">
+                <div class="relationship-type">${escapeHtml(r.type)}</div>
+                <button type="button" class="relation-link relationship-person" data-relation-id="${escapeAttr(person.id)}">${escapeHtml(person.name)}</button>
+              </div>` : '';
+            }).join('') || `<div class="relationship-empty">No relationships connected yet.<br>Use <strong>Edit → Relations</strong> to connect this character to another character.</div>`}
+          </div>
+        </div>
+      </div>
       <div class="detail-section"><h3>Abilities</h3>${abilitiesHtml}</div>
       <div class="detail-section"><h3>Backstory</h3><p>${escapeHtml(c.bio) || '<span style="color:var(--ink-faint)">Nothing recorded yet.</span>'}</p></div>
       ${c.notes ? `<div class="detail-section"><h3>Author Notes</h3><p>${escapeHtml(c.notes)}</p></div>` : ''}
     `;
     detailOverlay.classList.add('open');
+
+    document.querySelectorAll('.relation-link').forEach(link => {
+      link.addEventListener('click', () => {
+        const target = characters.find(x => x.id === link.dataset.relationId);
+        if(target) openDetail(target.id);
+      });
+    });
   }
   function closeDetail(){ detailOverlay.classList.remove('open'); activeDetailId = null; }
   document.querySelectorAll('[data-close-detail]').forEach(b=>b.addEventListener('click', closeDetail));
@@ -669,6 +1031,8 @@
 
   // ---------- init ----------
   loadCharacters();
+  normalizeCharacterData();
+  normalizeRelations();
   render();
 })();
 </script>
