@@ -102,6 +102,7 @@
     background:var(--bg-panel); border:1px solid var(--line); color:var(--ink-dim);
     padding:10px 10px; font-family:inherit; font-size:12.5px;
   }
+  .toolbar-filters{ display:flex; gap:12px; flex-wrap:wrap; }
 
   /* ---------- Archive grid ---------- */
   main{ padding:20px clamp(16px,4vw,56px) 60px; }
@@ -170,7 +171,7 @@
     margin-bottom:6px;
   }
   .field .hint{ font-size:10.5px; color:var(--ink-faint); margin-top:4px; }
-  .field input[type=text], .field input[type=url], .field textarea, .field select{
+  .field input[type=text], .field input[type=url], .field input[type=number], .field textarea, .field select{
     width:100%; background:var(--bg-card); border:1px solid var(--line); color:var(--ink);
     padding:9px 10px; font-family:inherit; font-size:13px;
   }
@@ -337,6 +338,47 @@
   }
   body{ animation:crtFlicker 5s infinite; }
 
+
+  /* ---------- Universe / Theme system ---------- */
+  .universe-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .universe-btn{display:flex;align-items:center;gap:9px;background:var(--bg-panel);border:1px solid var(--line-bright);color:var(--accent-bright);padding:9px 12px;font-family:inherit;font-size:11px;letter-spacing:.06em;text-transform:uppercase;min-width:210px;text-align:left}
+  .universe-btn:hover{border-color:var(--accent-bright);box-shadow:0 0 12px color-mix(in srgb,var(--accent) 20%,transparent)}
+  .universe-btn .universe-caret{margin-left:auto;color:var(--ink-faint)}
+  .universe-chip{color:var(--ink-dim);font-size:10px;letter-spacing:.05em}
+  .universe-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+  .universe-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);background:var(--bg-card);padding:11px 12px}
+  .universe-item.active{border-color:var(--accent-bright);box-shadow:inset 3px 0 0 var(--accent)}
+  .universe-item-main{min-width:0}
+  .universe-item-name{color:var(--paper);font-size:13px;font-weight:600}
+  .universe-item-meta{color:var(--ink-faint);font-size:10px;margin-top:4px}
+  .universe-item-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+  .theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:9px}
+  .theme-option{position:relative;text-align:left;background:var(--bg-card);border:1px solid var(--line);color:var(--ink);padding:11px;cursor:pointer;font-family:inherit}
+  .theme-option:hover{border-color:var(--accent-bright)}
+  .theme-option.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),inset 0 0 15px rgba(57,255,90,.05)}
+  .theme-swatch{height:28px;margin-bottom:8px;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;padding:0 7px;font-size:10px;letter-spacing:.08em}
+  .theme-name{font-size:11px;color:var(--paper)}
+  .theme-desc{font-size:9px;color:var(--ink-faint);margin-top:4px;line-height:1.35}
+  .universe-create{border-top:1px solid var(--line);padding-top:16px;margin-top:6px}
+  .universe-create h3{margin:0 0 10px;color:var(--paper);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  @media(max-width:700px){.theme-grid{grid-template-columns:1fr}.universe-item{grid-template-columns:1fr}.universe-item-actions{justify-content:flex-start}}
+
+  /* ---------- Character Questions editor ---------- */
+  .settings-section{ margin-bottom:22px; }
+  .settings-section h3{
+    margin:0 0 10px; color:var(--paper); font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+    border-bottom:1px dashed var(--line-bright); padding-bottom:6px;
+  }
+  .questions-list{ display:flex; flex-direction:column; gap:6px; max-height:320px; overflow-y:auto; padding-right:4px; }
+  .question-row{ display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line); background:var(--bg-card); }
+  .question-check{ display:flex; align-items:center; gap:9px; flex:1; min-width:0; font-size:12.5px; color:var(--ink); cursor:pointer; }
+  .question-check input{ accent-color:var(--accent-bright); flex-shrink:0; }
+  .question-check span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .question-type-badge{ font-size:9.5px; color:var(--ink-faint); letter-spacing:.06em; text-transform:uppercase; border:1px solid var(--line-bright); padding:3px 8px; flex-shrink:0; }
+  .q-delete{ background:none; border:1px solid var(--stamp-red); color:var(--stamp-red-bright); font-size:11px; padding:4px 9px; cursor:pointer; flex-shrink:0; }
+  .q-delete:hover{ background:rgba(161,58,47,.12); }
+  .add-question-panel{ border:1px dashed var(--line-bright); padding:14px; margin-top:12px; background:rgba(57,255,90,.03); }
+
 </style>
 </head>
 <body>
@@ -349,6 +391,12 @@
     <p class="subhead">Every possession, entity, and person on file. Fill a new case sheet below — it's kept in this archive automatically.</p>
   </div>
   <div class="header-right">
+    <div class="universe-bar">
+      <button class="universe-btn" id="universeBtn" title="Switch universe">
+        <span>◈</span><span id="universeName">TALES OF THE DAMNED</span><span class="universe-caret">▼</span>
+      </button>
+      <button class="btn-ghost" id="settingsBtn" title="Universe settings — theme &amp; character questions">⚙ Settings</button>
+    </div>
     <span class="count-chip" id="countChip">0 files on record</span>
     <button class="btn-ghost" id="exportBtn" title="Download all characters as a JSON backup">Export</button>
     <button class="btn-ghost" id="importBtn" title="Load characters from a JSON backup">Import</button>
@@ -361,21 +409,7 @@
   <div class="search-wrap">
     <input type="search" id="searchInput" placeholder="Search by name, faction, entity...">
   </div>
-  <select id="roleFilter">
-    <option value="">All roles</option>
-    <option value="Human">Human</option>
-    <option value="Possessed">Possessed</option>
-    <option value="Demon">Demon</option>
-    <option value="Angel">Angel</option>
-    <option value="Other">Other</option>
-  </select>
-  <select id="statusFilter">
-    <option value="">All statuses</option>
-    <option value="Active">Active</option>
-    <option value="Deceased">Deceased</option>
-    <option value="Missing">Missing</option>
-    <option value="Unknown">Unknown</option>
-  </select>
+  <div class="toolbar-filters" id="dynamicFilters"></div>
 </div>
 
 <main>
@@ -383,6 +417,93 @@
 </main>
 
 <footer>Stored locally in this browser · No data leaves your machine · Use Export regularly to back up your archive</footer>
+
+
+<!-- Universe Switcher Modal -->
+<div class="overlay" id="universeOverlay">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-head">
+      <h2>Switch Universe</h2>
+      <button class="close-x" data-close-universe>&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Saved Universes</label>
+        <div id="universeList" class="universe-list"></div>
+      </div>
+      <div class="universe-create">
+        <h3>+ Create New Universe</h3>
+        <p class="subhead" style="margin:0 0 10px">Starts with a small default question set (Name, Status, Relations, Backstory, Notes) — add your own questions afterward from ⚙ Settings.</p>
+        <div class="field">
+          <label for="universeNameInput">Universe Name</label>
+          <input type="text" id="universeNameInput" placeholder="e.g. The Curse of Redwood">
+        </div>
+        <div class="field">
+          <label>Theme</label>
+          <div id="themeGrid" class="theme-grid"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span style="flex:1"></span>
+      <button class="btn-ghost" data-close-universe>Cancel</button>
+      <button class="btn" id="createUniverseBtn">Create &amp; Switch</button>
+    </div>
+  </div>
+</div>
+
+<!-- Universe Settings Modal -->
+<div class="overlay" id="settingsOverlay">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-head">
+      <h2>⚙ Universe Settings — <span id="settingsUniverseName">—</span></h2>
+      <button class="close-x" data-close-settings>&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="settings-section">
+        <h3>Theme</h3>
+        <div id="settingsThemeGrid" class="theme-grid"></div>
+      </div>
+      <div class="settings-section">
+        <h3>Character Questions</h3>
+        <p class="subhead" style="margin:0 0 10px">Untick a question to hide it from this universe's case sheet. Custom questions can also be deleted. Existing answers are kept even when a question is hidden.</p>
+        <div id="questionsList" class="questions-list"></div>
+        <button type="button" class="btn-ghost" id="addQuestionBtn" style="margin-top:10px">+ Add Question</button>
+        <div id="addQuestionPanel" class="add-question-panel" style="display:none">
+          <div class="field">
+            <label for="nq-label">Question Label</label>
+            <input type="text" id="nq-label" placeholder="e.g. Cause of Death">
+          </div>
+          <div class="field">
+            <label>Question Type</label>
+            <div class="radio-group">
+              <label><input type="radio" name="nq-type" value="short_text" checked> Short Text</label>
+              <label><input type="radio" name="nq-type" value="long_text"> Long Text</label>
+              <label><input type="radio" name="nq-type" value="number"> Number</label>
+              <label><input type="radio" name="nq-type" value="dropdown"> Dropdown</label>
+              <label><input type="radio" name="nq-type" value="multiple_choice"> Multiple Choice</label>
+              <label><input type="radio" name="nq-type" value="yes_no"> Yes / No</label>
+              <label><input type="radio" name="nq-type" value="multiple_answers"> Multiple Answers</label>
+            </div>
+          </div>
+          <div class="field" id="nq-options-field" style="display:none">
+            <label for="nq-options">Options</label>
+            <textarea id="nq-options" placeholder="One option per line — e.g.&#10;Alive&#10;Missing&#10;Dead&#10;Unknown"></textarea>
+            <div class="hint">One answer option per line. Needs at least two.</div>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button type="button" class="btn-ghost" id="cancelAddQuestion">Cancel</button>
+            <button type="button" class="btn" id="confirmAddQuestion">Add Question</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span style="flex:1"></span>
+      <button class="btn" data-close-settings>Done</button>
+    </div>
+  </div>
+</div>
 
 <!-- Form Modal -->
 <div class="overlay" id="formOverlay">
@@ -394,124 +515,7 @@
     <div class="modal-body">
       <form id="charForm">
         <input type="hidden" id="charId">
-
-        <div class="field">
-          <label for="f-name">Name *</label>
-          <input type="text" id="f-name" required placeholder="e.g. Mireille Vantor">
-        </div>
-
-        <div class="row2">
-          <div class="field">
-            <label for="f-alias">Alias / Callsign</label>
-            <input type="text" id="f-alias" placeholder="optional">
-          </div>
-          <div class="field">
-            <label for="f-role">Role *</label>
-            <select id="f-role" required>
-              <option value="Human">Human</option>
-              <option value="Possessed">Possessed (Human + Entity)</option>
-              <option value="Demon">Demon</option>
-              <option value="Angel">Angel</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field" id="entityField">
-          <label for="f-entity">Entity Name</label>
-          <input type="text" id="f-entity" placeholder="the demon/angel occupying this body, if any">
-        </div>
-
-        <div class="row2">
-          <div class="field">
-            <label for="f-age-real">Age</label>
-            <input type="number" id="f-age-real" min="0" max="999" placeholder="e.g. 27">
-          </div>
-          <div class="field">
-            <label for="f-gender">Gender</label>
-            <select id="f-gender">
-              <option value="">Not specified</option>
-              <option>Female</option>
-              <option>Male</option>
-              <option>Non-binary</option>
-              <option>Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="f-eye-color">Eye Color</label>
-          <input type="text" id="f-eye-color" placeholder="e.g. Emerald green, amber, pale blue">
-        </div>
-
-        <div class="field">
-          <label for="f-languages">Languages Spoken</label>
-          <textarea id="f-languages" placeholder="One per line — e.g.&#10;English&#10;Dutch&#10;French"></textarea>
-          <div class="hint">Add every language this character can speak. One language per line.</div>
-        </div>
-
-        <div class="field">
-          <label>Origin</label>
-          <div class="row2">
-            <input type="text" id="f-city" placeholder="City">
-            <input type="text" id="f-district" placeholder="District / Country">
-          </div>
-          <div class="hint">Districts are treated as countries within the Tales of the Damned setting.</div>
-        </div>
-
-        <div class="field">
-          <label>Relations</label>
-          <div id="relationsPicker" class="relations-picker"></div>
-          <div class="hint">Connect this character to other created characters. You can choose the relationship type for each connection.</div>
-        </div>
-
-        <div class="field" id="ageField">
-          <label>Possession Age</label>
-          <div class="radio-group">
-            <label><input type="radio" name="f-age" value="Childhood"> Childhood</label>
-            <label><input type="radio" name="f-age" value="Teenage"> Teenage</label>
-            <label><input type="radio" name="f-age" value="Adult (21+)"> Adult (21+)</label>
-            <label><input type="radio" name="f-age" value="N/A" checked> N/A</label>
-          </div>
-          <div class="control-dynamic-note" id="controlNote">Select an age to see the control dynamic.</div>
-        </div>
-
-        <div class="row2">
-          <div class="field">
-            <label for="f-faction">Faction / Affiliation</label>
-            <input type="text" id="f-faction" placeholder="e.g. The Choir, Independent">
-          </div>
-          <div class="field">
-            <label for="f-status">Status</label>
-            <select id="f-status">
-              <option>Active</option>
-              <option>Deceased</option>
-              <option>Missing</option>
-              <option>Unknown</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="f-photo">Portrait Image URL</label>
-          <input type="url" id="f-photo" placeholder="https://... (optional)">
-        </div>
-
-        <div class="field">
-          <label for="f-abilities">Abilities</label>
-          <textarea id="f-abilities" placeholder="One per line — e.g.&#10;Combustion touch&#10;Retains momentum at high speed (hard to stop)"></textarea>
-          <div class="hint">One ability per line. Physics drawback goes well on the same line, e.g. "Invisibility — causes blindness while active".</div>
-        </div>
-
-        <div class="field">
-          <label for="f-bio">Backstory / Lore</label>
-          <textarea id="f-bio" style="min-height:120px" placeholder="Where they're from, how the possession happened, what they want..."></textarea>
-        </div>
-
-        <div class="field">
-          <label for="f-notes">GM / Author Notes</label>
-          <textarea id="f-notes" placeholder="Private notes, plot hooks, unresolved threads..."></textarea>
-        </div>
+        <div id="dynamicFields"></div>
       </form>
     </div>
     <div class="modal-foot">
@@ -545,57 +549,425 @@
 (function(){
   "use strict";
 
-  const STORAGE_KEY = "totd_characters_v2";
+  const STORAGE_KEY = "case_archive_universes_v2";
+  const LEGACY_STORAGE_KEY_V1 = "case_archive_universes_v1";
+  const LEGACY_STORAGE_KEYS = ["totd_characters_v1", "totd_characters_v2"];
+  let universes = [];
+  let activeUniverseId = "totd";
   let characters = [];
   let editingId = null;
   let activeDetailId = null;
+  let selectedNewTheme = "apple2";
 
-  // ---------- storage ----------
+  const THEMES = {
+    apple2:{name:"Apple II Green",desc:"Classic green monochrome computer",vars:{bgVoid:"#020a03",bgPanel:"#061207",bgCard:"#031006",bgCardHover:"#071b0a",ink:"#8cff8c",inkDim:"#4fbd55",inkFaint:"#28732f",accent:"#39ff5a",accentBright:"#8cff8c",line:"#12461a",lineBright:"#1c6926",paper:"#b7ffb7",stamp:"#39b94a"}},
+    amber:{name:"Amber Terminal",desc:"Warm vintage CRT terminal",vars:{bgVoid:"#0b0802",bgPanel:"#171006",bgCard:"#100a03",bgCardHover:"#211507",ink:"#ffd58a",inkDim:"#c08b42",inkFaint:"#795321",accent:"#ffb52e",accentBright:"#ffe0a3",line:"#5b3a12",lineBright:"#8a5b1d",paper:"#ffe8bd",stamp:"#d78320"}},
+    blue:{name:"Blue Terminal",desc:"Cold 1980s monochrome display",vars:{bgVoid:"#02070d",bgPanel:"#06111a",bgCard:"#031019",bgCardHover:"#071b28",ink:"#8bd8ff",inkDim:"#4b9fc7",inkFaint:"#28617d",accent:"#39c9ff",accentBright:"#a8e8ff",line:"#12415a",lineBright:"#1d6689",paper:"#c4efff",stamp:"#3b91c4"}},
+    paper:{name:"Paper Archive",desc:"Typewritten physical case files",vars:{bgVoid:"#14120e",bgPanel:"#1d1a14",bgCard:"#19160f",bgCardHover:"#282218",ink:"#d8d0b9",inkDim:"#a99f84",inkFaint:"#756d59",accent:"#d9c27c",accentBright:"#f0dfaa",line:"#504735",lineBright:"#6e6047",paper:"#f1e8d0",stamp:"#b86b54"}},
+    dos:{name:"DOS 80s",desc:"Old-school PC command line",vars:{bgVoid:"#00030a",bgPanel:"#000814",bgCard:"#000610",bgCardHover:"#001021",ink:"#a9c7ff",inkDim:"#6f8fca",inkFaint:"#405784",accent:"#6fa8ff",accentBright:"#c5dbff",line:"#1b3c72",lineBright:"#2e5ba3",paper:"#d6e4ff",stamp:"#7b93c4"}},
+    cyberpunk:{name:"Cyberpunk",desc:"Neon future terminal",vars:{bgVoid:"#09020d",bgPanel:"#12051a",bgCard:"#0d0313",bgCardHover:"#1b0725",ink:"#ff8df5",inkDim:"#b65cad",inkFaint:"#6e3470",accent:"#ff3edb",accentBright:"#ffb0f5",line:"#5a1759",lineBright:"#8b2384",paper:"#ffe0fb",stamp:"#ff5a76"}}
+  };
+
+  // ---------- Default question sets ----------
+  // TOTD's original hard-coded fields, preserved exactly so existing
+  // characters (in ANY universe created before this update) keep working.
+  const DEFAULT_TOTD_QUESTIONS = [
+    {id:"name", label:"Name", type:"short_text", required:true, builtin:true, locked:true},
+    {id:"alias", label:"Alias / Callsign", type:"short_text", builtin:true},
+    {id:"role", label:"Role", type:"dropdown", options:["Human","Possessed","Demon","Angel","Other"], required:true, builtin:true, filterable:true},
+    {id:"entity", label:"Entity Name", type:"short_text", builtin:true, showIf:{field:"role", values:["Possessed","Demon","Angel"]}},
+    {id:"ageReal", label:"Age", type:"number", builtin:true},
+    {id:"gender", label:"Gender", type:"dropdown", options:["Female","Male","Non-binary","Other"], builtin:true},
+    {id:"eyeColor", label:"Eye Color", type:"short_text", builtin:true},
+    {id:"languages", label:"Languages Spoken", type:"list", builtin:true},
+    {id:"city", label:"City", type:"short_text", builtin:true},
+    {id:"district", label:"District / Country", type:"short_text", builtin:true},
+    {id:"relations", label:"Relations", type:"relations", builtin:true},
+    {id:"age", label:"Possession Age", type:"possession_age", builtin:true, showIf:{field:"role", values:["Possessed"]}},
+    {id:"faction", label:"Faction / Affiliation", type:"short_text", builtin:true},
+    {id:"status", label:"Status", type:"dropdown", options:["Active","Deceased","Missing","Unknown"], builtin:true, filterable:true, isStatus:true},
+    {id:"photo", label:"Portrait Image URL", type:"photo_url", builtin:true},
+    {id:"abilities", label:"Abilities", type:"list", builtin:true},
+    {id:"bio", label:"Backstory / Lore", type:"long_text", builtin:true},
+    {id:"notes", label:"GM / Author Notes", type:"long_text", builtin:true}
+  ];
+
+  // Fresh universes start small — add your own questions from Settings.
+  const STARTER_QUESTIONS = [
+    {id:"name", label:"Name", type:"short_text", required:true, builtin:true, locked:true},
+    {id:"status", label:"Status", type:"dropdown", options:["Active","Deceased","Missing","Unknown"], builtin:true, filterable:true, isStatus:true},
+    {id:"photo", label:"Portrait Image URL", type:"photo_url", builtin:true},
+    {id:"relations", label:"Relations", type:"relations", builtin:true},
+    {id:"bio", label:"Backstory", type:"long_text", builtin:true},
+    {id:"notes", label:"Author Notes", type:"long_text", builtin:true}
+  ];
+
+  function cloneQuestions(arr){ return arr.map(q => ({...q, options: q.options ? [...q.options] : undefined, showIf: q.showIf ? {...q.showIf, values:[...q.showIf.values]} : undefined})); }
+
+  function ensureQuestions(u){
+    if(!u) return;
+    if(!Array.isArray(u.questions) || !u.questions.length){
+      u.questions = cloneQuestions(DEFAULT_TOTD_QUESTIONS);
+    }
+  }
+
+  function typeLabel(t){
+    return ({
+      short_text:"Short Text", long_text:"Long Text", number:"Number", dropdown:"Dropdown",
+      multiple_choice:"Multiple Choice", yes_no:"Yes / No", multiple_answers:"Multiple Answers",
+      list:"List", relations:"Relations", photo_url:"Image URL", possession_age:"Possession Age"
+    })[t] || t;
+  }
+
+  function themeVars(theme){
+    const v = (THEMES[theme] || THEMES.apple2).vars;
+    return {
+      '--bg-void':v.bgVoid,'--bg-panel':v.bgPanel,'--bg-card':v.bgCard,'--bg-card-hover':v.bgCardHover,
+      '--ink':v.ink,'--ink-dim':v.inkDim,'--ink-faint':v.inkFaint,'--accent':v.accent,'--accent-bright':v.accentBright,
+      '--stamp-red':v.stamp,'--stamp-red-bright':v.accentBright,'--line':v.line,'--line-bright':v.lineBright,
+      '--paper':v.paper
+    };
+  }
+
+  function applyTheme(theme){
+    const vars = themeVars(theme);
+    Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
+  }
+
+  function activeUniverse(){ return universes.find(u=>u.id===activeUniverseId) || universes[0]; }
+
+  function saveCurrentUniverse(){
+    const u = activeUniverse();
+    if(u) u.characters = characters;
+  }
+
+  // ---------- storage / universes ----------
   function loadCharacters(){
     try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      characters = raw ? JSON.parse(raw) : [];
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY_V1);
+      if(raw){
+        const parsed = JSON.parse(raw);
+        universes = Array.isArray(parsed.universes) ? parsed.universes : [];
+        activeUniverseId = parsed.activeUniverseId || universes[0]?.id || "totd";
+      }
+
+      if(!universes.length){
+        let legacy = [];
+        for(const key of LEGACY_STORAGE_KEYS){
+          const legacyRaw = localStorage.getItem(key);
+          if(legacyRaw){
+            try{ const parsed = JSON.parse(legacyRaw); if(Array.isArray(parsed)){ legacy = parsed; break; } }catch(_){}
+          }
+        }
+        universes = [{id:"totd",name:"Tales of the Damned",theme:"apple2",questions:cloneQuestions(DEFAULT_TOTD_QUESTIONS),characters:legacy}];
+        activeUniverseId = "totd";
+        persist();
+      }
+
+      universes.forEach(ensureQuestions);
+
+      if(!universes.some(u=>u.id===activeUniverseId)) activeUniverseId = universes[0]?.id || "totd";
+      const u = activeUniverse();
+      characters = Array.isArray(u?.characters) ? u.characters : [];
+      applyTheme(u?.theme || "apple2");
     }catch(e){
-      console.warn("Could not read archive from storage:", e);
-      characters = [];
+      console.warn("Could not read universe archive from storage:", e);
+      universes = [{id:"totd",name:"Tales of the Damned",theme:"apple2",questions:cloneQuestions(DEFAULT_TOTD_QUESTIONS),characters:[]}];
+      activeUniverseId = "totd";
+      characters = universes[0].characters;
+      applyTheme("apple2");
     }
   }
   function persist(){
     try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+      saveCurrentUniverse();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({version:2,activeUniverseId,universes}));
     }catch(e){
       console.warn("Could not save archive:", e);
-      showToast("Could not save — storage unavailable in this preview. Use Export to keep your work.");
+      showToast("Could not save — storage unavailable. Use Export to keep your work.");
     }
   }
 
+  function switchUniverse(id){
+    if(id===activeUniverseId) return;
+    saveCurrentUniverse();
+    const u = universes.find(x=>x.id===id);
+    if(!u) return;
+    activeUniverseId = id;
+    ensureQuestions(u);
+    characters = Array.isArray(u.characters) ? u.characters : [];
+    normalizeCharacterData();
+    normalizeRelations();
+    applyTheme(u.theme || "apple2");
+    persist();
+    closeForm();
+    closeDetail();
+    renderUniverseList();
+    renderFilters();
+    render();
+    showToast("Switched to " + u.name + ".");
+  }
+
   function uid(){ return 'c_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function qid(){ return 'q_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
 
   // ---------- rendering ----------
   const grid = document.getElementById('grid');
   const countChip = document.getElementById('countChip');
   const searchInput = document.getElementById('searchInput');
-  const roleFilter = document.getElementById('roleFilter');
-  const statusFilter = document.getElementById('statusFilter');
+  const universeOverlay = document.getElementById('universeOverlay');
+  const universeList = document.getElementById('universeList');
+  const themeGrid = document.getElementById('themeGrid');
+  const settingsOverlay = document.getElementById('settingsOverlay');
+
+  function renderUniverseButton(){
+    const u = activeUniverse();
+    document.getElementById('universeName').textContent = (u?.name || 'Tales of the Damned').toUpperCase();
+  }
+
+  function renderThemeGrid(){
+    themeGrid.innerHTML = Object.entries(THEMES).map(([id,t])=>{
+      const v=t.vars;
+      return `<button type="button" class="theme-option ${selectedNewTheme===id?'selected':''}" data-theme="${id}">
+        <div class="theme-swatch" style="background:${v.bgVoid};color:${v.accentBright};border-color:${v.lineBright}">>_ SYSTEM ONLINE</div>
+        <div class="theme-name">${escapeHtml(t.name)}</div>
+        <div class="theme-desc">${escapeHtml(t.desc)}</div>
+      </button>`;
+    }).join('');
+    themeGrid.querySelectorAll('[data-theme]').forEach(b=>b.addEventListener('click',()=>{
+      selectedNewTheme=b.dataset.theme;
+      renderThemeGrid();
+    }));
+  }
+
+  function renderUniverseList(){
+    universeList.innerHTML = universes.map(u=>{
+      const active=u.id===activeUniverseId;
+      const theme=THEMES[u.theme] || THEMES.apple2;
+      return `<div class="universe-item ${active?'active':''}">
+        <div class="universe-item-main">
+          <div class="universe-item-name">${active?'◉ ':'○ '}${escapeHtml(u.name)}</div>
+          <div class="universe-item-meta">${u.characters?.length||0} character${(u.characters?.length||0)===1?'':'s'} · ${escapeHtml(theme.name)} · ${(u.questions||[]).length} question${(u.questions||[]).length===1?'':'s'}</div>
+        </div>
+        <div class="universe-item-actions">
+          ${active ? '<span class="universe-chip">CURRENT</span>' : `<button type="button" class="btn-ghost switch-universe" data-universe="${escapeAttr(u.id)}">Switch</button>`}
+        </div>
+      </div>`;
+    }).join('');
+    universeList.querySelectorAll('.switch-universe').forEach(b=>b.addEventListener('click',()=>{
+      switchUniverse(b.dataset.universe);
+    }));
+  }
+
+  function openUniverseManager(){
+    renderUniverseButton();
+    renderUniverseList();
+    renderThemeGrid();
+    document.getElementById('universeNameInput').value='';
+    universeOverlay.classList.add('open');
+  }
+  function closeUniverseManager(){ universeOverlay.classList.remove('open'); }
+
+  document.getElementById('universeBtn').addEventListener('click', openUniverseManager);
+  document.querySelectorAll('[data-close-universe]').forEach(b=>b.addEventListener('click', closeUniverseManager));
+  universeOverlay.addEventListener('click',e=>{if(e.target===universeOverlay)closeUniverseManager();});
+  document.getElementById('createUniverseBtn').addEventListener('click',()=>{
+    const name=document.getElementById('universeNameInput').value.trim();
+    if(!name){ document.getElementById('universeNameInput').focus(); showToast('Give the universe a name first.'); return; }
+    saveCurrentUniverse();
+    const id='u_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    const u={id,name,theme:selectedNewTheme,questions:cloneQuestions(STARTER_QUESTIONS),characters:[]};
+    universes.push(u);
+    activeUniverseId=id;
+    characters=u.characters;
+    applyTheme(u.theme);
+    persist();
+    normalizeCharacterData();
+    normalizeRelations();
+    renderUniverseButton();
+    renderFilters();
+    render();
+    closeUniverseManager();
+    showToast('Created universe — '+name+'. Add its questions from ⚙ Settings.');
+  });
+
+  // ---------- Universe Settings (theme + questions) ----------
+  function renderSettingsThemeGrid(){
+    const u = activeUniverse();
+    const g = document.getElementById('settingsThemeGrid');
+    g.innerHTML = Object.entries(THEMES).map(([id,t])=>{
+      const v=t.vars;
+      return `<button type="button" class="theme-option ${u.theme===id?'selected':''}" data-theme="${id}">
+        <div class="theme-swatch" style="background:${v.bgVoid};color:${v.accentBright};border-color:${v.lineBright}">>_ SYSTEM ONLINE</div>
+        <div class="theme-name">${escapeHtml(t.name)}</div>
+        <div class="theme-desc">${escapeHtml(t.desc)}</div>
+      </button>`;
+    }).join('');
+    g.querySelectorAll('[data-theme]').forEach(b=>b.addEventListener('click',()=>{
+      u.theme = b.dataset.theme;
+      applyTheme(u.theme);
+      persist();
+      renderSettingsThemeGrid();
+    }));
+  }
+
+  function renderQuestionsList(){
+    const u = activeUniverse();
+    ensureQuestions(u);
+    const list = document.getElementById('questionsList');
+    list.innerHTML = u.questions.map(q => `
+      <div class="question-row">
+        <label class="question-check">
+          <input type="checkbox" class="q-toggle" data-qid="${escapeAttr(q.id)}" ${q.enabled!==false?'checked':''} ${q.locked?'disabled':''}>
+          <span>${escapeHtml(q.label)}</span>
+        </label>
+        <span class="question-type-badge">${typeLabel(q.type)}</span>
+        ${q.builtin ? '' : `<button type="button" class="q-delete" data-qid="${escapeAttr(q.id)}" title="Delete question">✕</button>`}
+      </div>
+    `).join('');
+    list.querySelectorAll('.q-toggle').forEach(cb=>cb.addEventListener('change', ()=>{
+      const q = u.questions.find(x=>x.id===cb.dataset.qid);
+      if(q) q.enabled = cb.checked;
+      persist();
+      renderFilters();
+      render();
+    }));
+    list.querySelectorAll('.q-delete').forEach(btn=>btn.addEventListener('click', ()=>{
+      if(!confirm("Delete this question? Existing answers for it will stay on the characters but won't be shown anywhere.")) return;
+      u.questions = u.questions.filter(x=>x.id!==btn.dataset.qid);
+      persist();
+      renderQuestionsList();
+      renderFilters();
+      render();
+    }));
+  }
+
+  function openSettings(){
+    const u = activeUniverse();
+    ensureQuestions(u);
+    document.getElementById('settingsUniverseName').textContent = u.name;
+    renderSettingsThemeGrid();
+    renderQuestionsList();
+    document.getElementById('addQuestionPanel').style.display='none';
+    settingsOverlay.classList.add('open');
+  }
+  function closeSettings(){
+    settingsOverlay.classList.remove('open');
+    renderUniverseButton();
+    renderFilters();
+    render();
+  }
+  document.getElementById('settingsBtn').addEventListener('click', openSettings);
+  document.querySelectorAll('[data-close-settings]').forEach(b=>b.addEventListener('click', closeSettings));
+  settingsOverlay.addEventListener('click', e=>{ if(e.target===settingsOverlay) closeSettings(); });
+
+  document.getElementById('addQuestionBtn').addEventListener('click', ()=>{
+    document.getElementById('addQuestionPanel').style.display='';
+    document.getElementById('nq-label').value='';
+    document.getElementById('nq-options').value='';
+    const defaultType = document.querySelector('input[name="nq-type"][value="short_text"]');
+    if(defaultType) defaultType.checked = true;
+    document.getElementById('nq-options-field').style.display='none';
+    document.getElementById('nq-label').focus();
+  });
+  document.getElementById('cancelAddQuestion').addEventListener('click', ()=>{
+    document.getElementById('addQuestionPanel').style.display='none';
+  });
+  document.querySelectorAll('input[name="nq-type"]').forEach(r=>r.addEventListener('change', ()=>{
+    const checked = document.querySelector('input[name="nq-type"]:checked');
+    const needsOptions = checked && ['dropdown','multiple_choice','multiple_answers'].includes(checked.value);
+    document.getElementById('nq-options-field').style.display = needsOptions ? '' : 'none';
+  }));
+  document.getElementById('confirmAddQuestion').addEventListener('click', ()=>{
+    const label = document.getElementById('nq-label').value.trim();
+    if(!label){ showToast('Give the question a label first.'); document.getElementById('nq-label').focus(); return; }
+    const typeChecked = document.querySelector('input[name="nq-type"]:checked');
+    const type = typeChecked ? typeChecked.value : 'short_text';
+    const needsOptions = ['dropdown','multiple_choice','multiple_answers'].includes(type);
+    const options = needsOptions
+      ? document.getElementById('nq-options').value.split('\n').map(s=>s.trim()).filter(Boolean)
+      : undefined;
+    if(needsOptions && (!options || options.length<2)){ showToast('Add at least two options.'); return; }
+    const u = activeUniverse();
+    ensureQuestions(u);
+    const q = { id:qid(), label, type, enabled:true, builtin:false };
+    if(options) q.options = options;
+    if(type==='dropdown') q.filterable = true;
+    u.questions.push(q);
+    persist();
+    document.getElementById('addQuestionPanel').style.display='none';
+    renderQuestionsList();
+    renderFilters();
+    render();
+    showToast('Question added to ' + u.name + '.');
+  });
 
   function initials(name){
-    return name.trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '?';
+    return (name||'').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '?';
+  }
+
+  // ---------- toolbar filters (dynamic per universe) ----------
+  function renderFilters(){
+    const u = activeUniverse();
+    ensureQuestions(u);
+    const filterQs = u.questions.filter(q => q.enabled!==false && q.type==='dropdown' && q.filterable);
+    const wrap = document.getElementById('dynamicFilters');
+    wrap.innerHTML = filterQs.map(q => `
+      <select class="dyn-filter" data-qid="${escapeAttr(q.id)}">
+        <option value="">All ${escapeHtml(q.label)}</option>
+        ${(q.options||[]).map(o=>`<option value="${escapeAttr(o)}">${escapeHtml(o)}</option>`).join('')}
+      </select>
+    `).join('');
+    wrap.querySelectorAll('.dyn-filter').forEach(sel=>sel.addEventListener('input', render));
   }
 
   function matchesFilters(c){
     const q = searchInput.value.trim().toLowerCase();
-    const role = roleFilter.value;
-    const status = statusFilter.value;
-    if(role && c.role !== role) return false;
-    if(status && c.status !== status) return false;
+    const filterSelects = document.querySelectorAll('.dyn-filter');
+    for(const sel of filterSelects){
+      if(sel.value && c[sel.dataset.qid] !== sel.value) return false;
+    }
     if(q){
-      const hay = [c.name, c.alias, c.entity, c.faction, c.bio, c.eyeColor, c.city, c.district, c.gender, ...(c.languages || [])].join(' ').toLowerCase();
+      const hay = Object.entries(c)
+        .filter(([k])=>!['id','fileNo','relations'].includes(k))
+        .map(([,v])=> Array.isArray(v) ? v.join(' ') : String(v ?? ''))
+        .join(' ').toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
   }
 
+  // ---------- card preview lines ----------
+  function cardSecondaryHtml(c, questions){
+    const has = id => questions.some(q => q.id===id && q.enabled!==false);
+    if(has('alias') || has('role') || has('faction') || has('city') || has('district') || has('languages')){
+      const lines = [];
+      if(c.alias) lines.push(`<div class="folder-role">"${escapeHtml(c.alias)}"</div>`);
+      else if(c.entity || c.role) lines.push(`<div class="folder-role">${escapeHtml(c.entity || c.role || '')}</div>`);
+      lines.push(`<div class="folder-faction">${escapeHtml(c.faction || 'No affiliation on file')}</div>`);
+      if(c.city || c.district) lines.push(`<div class="folder-faction">${escapeHtml([c.city,c.district].filter(Boolean).join(' · '))}</div>`);
+      if(c.languages && c.languages.length) lines.push(`<div class="folder-faction">${c.languages.length} language${c.languages.length===1?'':'s'}</div>`);
+      return lines.join('');
+    }
+    const previewQs = questions.filter(q => q.enabled!==false && q.id!=='name' && !q.isStatus &&
+      !['long_text','list','relations','photo_url','multiple_answers'].includes(q.type)).slice(0,3);
+    const lines = previewQs.map(q=>{
+      const v = c[q.id];
+      if(v===undefined || v===null || v==='') return '';
+      return `<div class="folder-faction">${escapeHtml(q.label)}: ${escapeHtml(String(v))}</div>`;
+    }).filter(Boolean);
+    if(!lines.length) return `<div class="folder-faction">No details on file yet</div>`;
+    return lines.join('');
+  }
+
   function render(){
+    renderUniverseButton();
+    const u = activeUniverse();
+    ensureQuestions(u);
+    const questions = u.questions.filter(q=>q.enabled!==false);
+    const statusQ = questions.find(q=>q.isStatus);
+    const roleQ = questions.find(q=>q.id==='role');
+
     const visible = characters.filter(matchesFilters);
     countChip.textContent = characters.length + " file" + (characters.length===1?"":"s") + " on record" +
       (visible.length !== characters.length ? " · " + visible.length + " shown" : "");
@@ -609,22 +981,23 @@
       return;
     }
 
-    grid.innerHTML = visible.map(c => `
-      <div class="folder" data-id="${c.id}">
-        <div class="stamp status-${c.status.toLowerCase()}">${c.status}</div>
-        <div class="folder-tab"><span>FILE №${c.fileNo}</span><span>${c.role}</span></div>
+    grid.innerHTML = visible.map(c => {
+      const statusVal = statusQ ? c[statusQ.id] : null;
+      const roleVal = roleQ ? c[roleQ.id] : null;
+      return `
+      <div class="folder" data-id="${escapeAttr(c.id)}">
+        ${statusVal ? `<div class="stamp status-${String(statusVal).toLowerCase()}">${escapeHtml(statusVal)}</div>` : ''}
+        <div class="folder-tab"><span>FILE №${escapeHtml(c.fileNo||'')}</span><span>${escapeHtml(roleVal||'')}</span></div>
         <div class="folder-photo" style="${c.photo ? `background-image:url('${escapeAttr(c.photo)}')` : ''}">
           ${c.photo ? '' : initials(c.name)}
         </div>
         <div class="folder-body">
           <div class="folder-name">${escapeHtml(c.name)}</div>
-          ${c.alias ? `<div class="folder-role">"${escapeHtml(c.alias)}"</div>` : `<div class="folder-role">${escapeHtml(c.entity || c.role)}</div>`}
-          <div class="folder-faction">${escapeHtml(c.faction || 'No affiliation on file')}</div>
-          ${c.city || c.district ? `<div class="folder-faction">${escapeHtml([c.city,c.district].filter(Boolean).join(' · '))}</div>` : ''}
-          ${c.languages?.length ? `<div class="folder-faction">${c.languages.length} language${c.languages.length === 1 ? '' : 's'}</div>` : ''}
+          ${cardSecondaryHtml(c, questions)}
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     grid.querySelectorAll('.folder').forEach(el=>{
       el.addEventListener('click', ()=> openDetail(el.dataset.id));
@@ -632,36 +1005,26 @@
   }
 
   function escapeHtml(s){
-    return (s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    return (s==null?'':String(s)).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   }
   function escapeAttr(s){ return escapeHtml(s).replace(/'/g,"&#39;"); }
 
-  // ---------- control dynamic text ----------
+  // ---------- control dynamic text (possession age) ----------
   const controlDynamics = {
     "Childhood": "Possessed as a child — the human retains control. The entity is a passenger.",
     "Teenage": "Possessed as a teenager — control mostly stays human, with occasional slippage.",
     "Adult (21+)": "Possessed at 21+ — the entity has full control. The human is the passenger.",
     "N/A": "Not applicable — this character isn't part of a possession pairing."
   };
-  function updateControlNote(){
-    const checked = document.querySelector('input[name="f-age"]:checked');
-    document.getElementById('controlNote').textContent = checked ? controlDynamics[checked.value] : '';
+  function updatePossessionNote(fieldId, value){
+    const note = document.querySelector(`[data-note-for="${fieldId}"]`);
+    if(note) note.textContent = controlDynamics[value] || controlDynamics['N/A'];
   }
-  document.querySelectorAll('input[name="f-age"]').forEach(r => r.addEventListener('change', updateControlNote));
-
-  function toggleRoleFields(){
-    const role = document.getElementById('f-role').value;
-    const showPossessionFields = (role === 'Possessed' || role === 'Demon' || role === 'Angel');
-    document.getElementById('entityField').style.display = showPossessionFields ? '' : 'none';
-    document.getElementById('ageField').style.display = (role === 'Possessed') ? '' : 'none';
-  }
-  document.getElementById('f-role').addEventListener('change', toggleRoleFields);
 
   // ---------- form open/close ----------
   const formOverlay = document.getElementById('formOverlay');
   const detailOverlay = document.getElementById('detailOverlay');
   const charForm = document.getElementById('charForm');
-
 
   const relationTypes = [
     "Friend", "Family", "Parent", "Child", "Sibling", "Partner",
@@ -688,6 +1051,7 @@
 
   function renderRelationsPicker(relations){
     const wrap = document.getElementById('relationsPicker');
+    if(!wrap) return;
     const usable = (relations || []).filter(r => characters.some(c => c.id === r.id));
 
     if(!characters.length || characters.length < 2){
@@ -706,7 +1070,9 @@
     wrap.appendChild(add);
   }
 
-  function addRelationRow(selectedId='', selectedType='Friend', wrap=document.getElementById('relationsPicker')){
+  function addRelationRow(selectedId='', selectedType='Friend', wrap){
+    wrap = wrap || document.getElementById('relationsPicker');
+    if(!wrap) return;
     const row = document.createElement('div');
     row.className = 'relation-row';
 
@@ -744,16 +1110,11 @@
   function normalizeCharacterData(){
     characters.forEach(c => {
       if(!Array.isArray(c.relations)) c.relations = [];
-      if(!Array.isArray(c.languages)){
+      if(c.languages !== undefined && !Array.isArray(c.languages)){
         c.languages = c.languages
           ? String(c.languages).split(/\n|,/).map(s=>s.trim()).filter(Boolean)
           : [];
       }
-      if(c.ageReal === undefined) c.ageReal = null;
-      if(c.gender === undefined) c.gender = '';
-      if(c.eyeColor === undefined) c.eyeColor = '';
-      if(c.city === undefined) c.city = '';
-      if(c.district === undefined) c.district = '';
     });
   }
 
@@ -761,16 +1122,6 @@
     characters.forEach(c => {
       if(!Array.isArray(c.relations)) c.relations = [];
     });
-  }
-
-  function relationExists(character, targetId, type){
-    return character.relations.some(r => r.id === targetId && r.type === type);
-  }
-
-  function removeRelation(character, targetId, type){
-    character.relations = (character.relations || []).filter(
-      r => !(r.id === targetId && r.type === type)
-    );
   }
 
   function syncRelationsForCharacter(characterId, oldRelations, newRelations){
@@ -808,39 +1159,163 @@
     });
   }
 
+  // ---------- dynamic field rendering ----------
+  function fieldWrap(q, inner, hint){
+    return `<div class="field" data-qfield="${escapeAttr(q.id)}">
+      <label>${escapeHtml(q.label)}${q.required?' *':''}</label>
+      ${inner}
+      ${hint?`<div class="hint">${hint}</div>`:''}
+    </div>`;
+  }
+
+  function renderQuestionField(q, char){
+    const val = char ? char[q.id] : undefined;
+    switch(q.type){
+      case 'short_text':
+        return fieldWrap(q, `<input type="text" class="qf-input" data-qid="${escapeAttr(q.id)}" value="${escapeAttr(val||'')}" ${q.required?'required':''}>`);
+      case 'long_text':
+        return fieldWrap(q, `<textarea class="qf-input" data-qid="${escapeAttr(q.id)}" style="min-height:90px">${escapeHtml(val||'')}</textarea>`);
+      case 'number':
+        return fieldWrap(q, `<input type="number" class="qf-input" data-qid="${escapeAttr(q.id)}" value="${val!=null?escapeAttr(String(val)):''}">`);
+      case 'dropdown':
+        return fieldWrap(q, `<select class="qf-input" data-qid="${escapeAttr(q.id)}">${(q.options||[]).map(o=>`<option value="${escapeAttr(o)}" ${o===val?'selected':''}>${escapeHtml(o)}</option>`).join('')}</select>`);
+      case 'multiple_choice':
+        return fieldWrap(q, `<div class="radio-group">${(q.options||[]).map(o=>`<label><input type="radio" name="qf-${escapeAttr(q.id)}" value="${escapeAttr(o)}" ${o===val?'checked':''}> ${escapeHtml(o)}</label>`).join('')}</div>`);
+      case 'yes_no':
+        return fieldWrap(q, `<div class="radio-group">${['Yes','No'].map(o=>`<label><input type="radio" name="qf-${escapeAttr(q.id)}" value="${o}" ${o===val?'checked':''}> ${o}</label>`).join('')}</div>`);
+      case 'multiple_answers':
+        return fieldWrap(q, `<div class="radio-group">${(q.options||[]).map(o=>`<label><input type="checkbox" class="qf-multi" data-qid="${escapeAttr(q.id)}" value="${escapeAttr(o)}" ${(val||[]).includes(o)?'checked':''}> ${escapeHtml(o)}</label>`).join('')}</div>`);
+      case 'list':
+        return fieldWrap(q, `<textarea class="qf-input qf-list" data-qid="${escapeAttr(q.id)}" placeholder="One per line">${(val||[]).join('\n')}</textarea>`, 'One item per line.');
+      case 'photo_url':
+        return fieldWrap(q, `<input type="url" class="qf-input" data-qid="${escapeAttr(q.id)}" value="${escapeAttr(val||'')}" placeholder="https://... (optional)">`);
+      case 'relations':
+        return `<div class="field" data-qfield="${escapeAttr(q.id)}">
+          <label>${escapeHtml(q.label)}</label>
+          <div id="relationsPicker" class="relations-picker"></div>
+          <div class="hint">Connect this character to other created characters. You can choose the relationship type for each connection.</div>
+        </div>`;
+      case 'possession_age':
+        return `<div class="field" data-qfield="${escapeAttr(q.id)}">
+          <label>${escapeHtml(q.label)}</label>
+          <div class="radio-group">
+            ${['Childhood','Teenage','Adult (21+)','N/A'].map(o=>`<label><input type="radio" name="qf-${escapeAttr(q.id)}" value="${o}" ${(val||'N/A')===o?'checked':''}> ${o}</label>`).join('')}
+          </div>
+          <div class="control-dynamic-note" data-note-for="${escapeAttr(q.id)}"></div>
+        </div>`;
+      default:
+        return '';
+    }
+  }
+
+  function getFieldValue(fieldId){
+    const sel = document.querySelector(`select.qf-input[data-qid="${fieldId}"]`);
+    if(sel) return sel.value;
+    const radio = document.querySelector(`input[name="qf-${fieldId}"]:checked`);
+    if(radio) return radio.value;
+    const txt = document.querySelector(`.qf-input[data-qid="${fieldId}"]`);
+    if(txt) return txt.value;
+    return '';
+  }
+
+  function applyShowIf(questions){
+    questions.forEach(q=>{
+      if(!q.showIf) return;
+      const wrapper = document.querySelector(`[data-qfield="${q.id}"]`);
+      if(!wrapper) return;
+      const update = ()=>{ wrapper.style.display = q.showIf.values.includes(getFieldValue(q.showIf.field)) ? '' : 'none'; };
+      update();
+      const sel = document.querySelector(`select.qf-input[data-qid="${q.showIf.field}"]`);
+      if(sel) sel.addEventListener('change', update);
+      document.querySelectorAll(`input[name="qf-${q.showIf.field}"]`).forEach(r=>r.addEventListener('change', update));
+    });
+  }
+
+  function collectQuestionAnswers(questions){
+    const data = {};
+    questions.forEach(q=>{
+      switch(q.type){
+        case 'short_text': case 'photo_url': {
+          const el = document.querySelector(`.qf-input[data-qid="${q.id}"]`);
+          if(el) data[q.id] = el.value.trim();
+          break;
+        }
+        case 'number': {
+          const el = document.querySelector(`input.qf-input[data-qid="${q.id}"]`);
+          if(el) data[q.id] = el.value ? Number(el.value) : null;
+          break;
+        }
+        case 'long_text': {
+          const el = document.querySelector(`textarea.qf-input[data-qid="${q.id}"]`);
+          if(el) data[q.id] = el.value.trim();
+          break;
+        }
+        case 'dropdown': {
+          const el = document.querySelector(`select.qf-input[data-qid="${q.id}"]`);
+          if(el) data[q.id] = el.value;
+          break;
+        }
+        case 'multiple_choice': case 'yes_no': {
+          const checked = document.querySelector(`input[name="qf-${q.id}"]:checked`);
+          data[q.id] = checked ? checked.value : '';
+          break;
+        }
+        case 'possession_age': {
+          const checked = document.querySelector(`input[name="qf-${q.id}"]:checked`);
+          data[q.id] = checked ? checked.value : 'N/A';
+          break;
+        }
+        case 'multiple_answers': {
+          data[q.id] = [...document.querySelectorAll(`.qf-multi[data-qid="${q.id}"]:checked`)].map(x=>x.value);
+          break;
+        }
+        case 'list': {
+          const el = document.querySelector(`textarea.qf-list[data-qid="${q.id}"]`);
+          data[q.id] = el ? el.value.split('\n').map(s=>s.trim()).filter(Boolean) : [];
+          break;
+        }
+        case 'relations': {
+          data.relations = collectRelations();
+          break;
+        }
+      }
+    });
+    return data;
+  }
+
   function openForm(char){
     editingId = char ? char.id : null;
     document.getElementById('formTitle').textContent = char ? 'Edit Case File' : 'New Case File';
     document.getElementById('deleteBtn').style.display = char ? '' : 'none';
 
-    document.getElementById('f-name').value = char?.name || '';
-    document.getElementById('f-alias').value = char?.alias || '';
-    document.getElementById('f-role').value = char?.role || 'Human';
-    document.getElementById('f-entity').value = char?.entity || '';
-    document.getElementById('f-age-real').value = char?.ageReal ?? '';
-    document.getElementById('f-gender').value = char?.gender || '';
-    document.getElementById('f-eye-color').value = char?.eyeColor || '';
-    document.getElementById('f-languages').value = (char?.languages || []).join('\n');
-    document.getElementById('f-city').value = char?.city || '';
-    document.getElementById('f-district').value = char?.district || '';
-    document.getElementById('f-faction').value = char?.faction || '';
-    renderRelationsPicker(char?.relations || []);
-    document.getElementById('f-status').value = char?.status || 'Active';
-    document.getElementById('f-photo').value = char?.photo || '';
-    document.getElementById('f-abilities').value = (char?.abilities || []).join('\n');
-    document.getElementById('f-bio').value = char?.bio || '';
-    document.getElementById('f-notes').value = char?.notes || '';
+    const u = activeUniverse();
+    ensureQuestions(u);
+    const questions = u.questions.filter(q=>q.enabled!==false);
+    const container = document.getElementById('dynamicFields');
+    container.innerHTML = questions.map(q=>renderQuestionField(q, char)).join('');
 
-    const ageVal = char?.age || 'N/A';
-    const ageRadio = document.querySelector(`input[name="f-age"][value="${ageVal}"]`);
-    if(ageRadio) ageRadio.checked = true;
+    if(questions.some(q=>q.type==='relations')){
+      renderRelationsPicker(char?.relations || []);
+    }
 
-    toggleRoleFields();
-    updateControlNote();
+    const ageQ = questions.find(q=>q.type==='possession_age');
+    if(ageQ){
+      updatePossessionNote(ageQ.id, char?.[ageQ.id] || 'N/A');
+      document.querySelectorAll(`input[name="qf-${ageQ.id}"]`).forEach(r=>r.addEventListener('change', ()=>updatePossessionNote(ageQ.id, r.value)));
+    }
+
+    applyShowIf(questions);
+
     formOverlay.classList.add('open');
-    document.getElementById('f-name').focus();
+    const nameInput = document.querySelector('.qf-input[data-qid="name"]');
+    if(nameInput) nameInput.focus();
   }
-  function closeForm(){ formOverlay.classList.remove('open'); editingId = null; charForm.reset(); document.getElementById('relationsPicker').innerHTML = ''; }
+  function closeForm(){
+    formOverlay.classList.remove('open');
+    editingId = null;
+    charForm.reset();
+    document.getElementById('dynamicFields').innerHTML = '';
+  }
 
   document.getElementById('newBtn').addEventListener('click', ()=> openForm(null));
   document.querySelectorAll('[data-close-form]').forEach(b=>b.addEventListener('click', closeForm));
@@ -849,27 +1324,12 @@
   document.getElementById('saveBtn').addEventListener('click', ()=>{
     if(!charForm.reportValidity()) return;
 
-    const ageChecked = document.querySelector('input[name="f-age"]:checked');
-    const data = {
-      name: document.getElementById('f-name').value.trim(),
-      alias: document.getElementById('f-alias').value.trim(),
-      role: document.getElementById('f-role').value,
-      entity: document.getElementById('f-entity').value.trim(),
-      age: ageChecked ? ageChecked.value : 'N/A',
-      ageReal: document.getElementById('f-age-real').value ? Number(document.getElementById('f-age-real').value) : null,
-      gender: document.getElementById('f-gender').value,
-      eyeColor: document.getElementById('f-eye-color').value.trim(),
-      languages: document.getElementById('f-languages').value.split('\n').map(s=>s.trim()).filter(Boolean),
-      city: document.getElementById('f-city').value.trim(),
-      district: document.getElementById('f-district').value.trim(),
-      faction: document.getElementById('f-faction').value.trim(),
-      relations: collectRelations(),
-      status: document.getElementById('f-status').value,
-      photo: document.getElementById('f-photo').value.trim(),
-      abilities: document.getElementById('f-abilities').value.split('\n').map(s=>s.trim()).filter(Boolean),
-      bio: document.getElementById('f-bio').value.trim(),
-      notes: document.getElementById('f-notes').value.trim(),
-    };
+    const u = activeUniverse();
+    ensureQuestions(u);
+    const questions = u.questions.filter(q=>q.enabled!==false);
+    const data = collectQuestionAnswers(questions);
+    const hasRelationsQuestion = questions.some(q=>q.type==='relations');
+    if(!Array.isArray(data.relations)) data.relations = [];
 
     if(editingId){
       const idx = characters.findIndex(c=>c.id === editingId);
@@ -878,16 +1338,19 @@
           ? characters[idx].relations.map(r => ({...r}))
           : [];
         characters[idx] = {...characters[idx], ...data};
-        syncRelationsForCharacter(editingId, oldRelations, characters[idx].relations);
+        if(hasRelationsQuestion){
+          syncRelationsForCharacter(editingId, oldRelations, characters[idx].relations);
+        }
       }
-      showToast('Case file updated — relations synchronized.');
+      showToast('Case file updated.');
     } else {
       data.id = uid();
       data.fileNo = String(characters.length + 1).padStart(3,'0');
-      data.relations = Array.isArray(data.relations) ? data.relations : [];
       characters.push(data);
-      syncRelationsForCharacter(data.id, [], data.relations);
-      showToast('New case file added — relations synchronized.');
+      if(hasRelationsQuestion){
+        syncRelationsForCharacter(data.id, [], data.relations);
+      }
+      showToast('New case file added.');
     }
     persist();
     render();
@@ -909,56 +1372,94 @@
   });
 
   // ---------- detail view ----------
+  function relationshipNetworkHtml(c){
+    const conns = (c.relations || []).filter(r => characters.some(x => x.id === r.id));
+    return `<div class="relationship-network">
+      <div class="relationship-network-head">
+        <div class="relationship-network-title">◈ Relationship Network</div>
+        <div class="relationship-count">${conns.length} connection${conns.length === 1 ? '' : 's'}</div>
+      </div>
+      <div class="relationship-list">
+        ${conns.map(r => {
+          const person = characters.find(x => x.id === r.id);
+          return `<div class="relationship-card">
+            <div class="relationship-type">${escapeHtml(r.type)}</div>
+            <button type="button" class="relation-link relationship-person" data-relation-id="${escapeAttr(person.id)}">${escapeHtml(person.name)}</button>
+          </div>`;
+        }).join('') || `<div class="relationship-empty">No relationships connected yet.<br>Use <strong>Edit → Relations</strong> to connect this character to another character.</div>`}
+      </div>
+    </div>`;
+  }
+
+  function renderQuestionValue(q, c){
+    const v = c[q.id];
+    if(v===undefined || v===null || v==='' || (Array.isArray(v) && v.length===0)) return '';
+    switch(q.type){
+      case 'long_text':
+        return `<div class="detail-section"><h3>${escapeHtml(q.label)}</h3><p>${escapeHtml(v)}</p></div>`;
+      case 'list': case 'multiple_answers':
+        return `<div class="detail-section"><h3>${escapeHtml(q.label)}</h3><ul class="ability-list">${v.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul></div>`;
+      default:
+        return `<div class="detail-section"><h3>${escapeHtml(q.label)}</h3><p>${escapeHtml(String(v))}</p></div>`;
+    }
+  }
+
+  const HANDLED_DETAIL_IDS = new Set(['name','alias','role','entity','ageReal','gender','eyeColor','languages','city','district','relations','age','faction','status','photo','abilities','bio','notes']);
+
   function openDetail(id){
     const c = characters.find(x=>x.id === id);
     if(!c) return;
     activeDetailId = id;
     document.getElementById('detailName').textContent = c.name;
 
-    const abilitiesHtml = c.abilities && c.abilities.length
-      ? `<ul class="ability-list">${c.abilities.map(a=>`<li>${escapeHtml(a)}</li>`).join('')}</ul>`
-      : `<p style="color:var(--ink-faint)">No abilities on file.</p>`;
+    const u = activeUniverse();
+    ensureQuestions(u);
+    const questions = u.questions.filter(q=>q.enabled!==false);
+    const ageQ = questions.find(q=>q.type==='possession_age');
 
-    document.getElementById('detailBody').innerHTML = `
-      <div class="detail-photo" style="${c.photo ? `background-image:url('${escapeAttr(c.photo)}')` : ''}">
-        ${c.photo ? '' : initials(c.name)}
-      </div>
-      <div class="detail-tags">
-        <span class="tag">${c.role}</span>
-        <span class="tag">${c.status}</span>
-        ${c.faction ? `<span class="tag">${escapeHtml(c.faction)}</span>` : ''}
-        ${c.age && c.age !== 'N/A' ? `<span class="tag">${c.age}</span>` : ''}
-      </div>
-      ${c.alias ? `<div class="detail-section"><h3>Alias</h3><p>${escapeHtml(c.alias)}</p></div>` : ''}
-      ${(c.ageReal != null || c.gender || c.eyeColor) ? `<div class="detail-section"><h3>Identity</h3><p>${[
-        c.ageReal != null ? 'Age: ' + escapeHtml(String(c.ageReal)) : '',
-        c.gender ? 'Gender: ' + escapeHtml(c.gender) : '',
-        c.eyeColor ? 'Eye color: ' + escapeHtml(c.eyeColor) : ''
-      ].filter(Boolean).join(' · ')}</p></div>` : ''}
-      ${c.languages?.length ? `<div class="detail-section"><h3>Languages</h3><ul class="ability-list">${c.languages.map(l => `<li>${escapeHtml(l)}</li>`).join('')}</ul></div>` : ''}
-      ${(c.city || c.district) ? `<div class="detail-section"><h3>Origin</h3><p>${escapeHtml([c.city,c.district].filter(Boolean).join(' · '))}</p></div>` : ''}
-      ${c.entity ? `<div class="detail-section"><h3>Entity</h3><p>${escapeHtml(c.entity)}${c.age && c.age !== 'N/A' ? ' — ' + controlDynamics[c.age] : ''}</p></div>` : ''}
-      <div class="detail-section">
-        <div class="relationship-network">
-          <div class="relationship-network-head">
-            <div class="relationship-network-title">◈ Relationship Network</div>
-            <div class="relationship-count">${(c.relations || []).filter(r => characters.some(x => x.id === r.id)).length} connection${(c.relations || []).filter(r => characters.some(x => x.id === r.id)).length === 1 ? '' : 's'}</div>
-          </div>
-          <div class="relationship-list">
-            ${(c.relations || []).map(r => {
-              const person = characters.find(x => x.id === r.id);
-              return person ? `<div class="relationship-card">
-                <div class="relationship-type">${escapeHtml(r.type)}</div>
-                <button type="button" class="relation-link relationship-person" data-relation-id="${escapeAttr(person.id)}">${escapeHtml(person.name)}</button>
-              </div>` : '';
-            }).join('') || `<div class="relationship-empty">No relationships connected yet.<br>Use <strong>Edit → Relations</strong> to connect this character to another character.</div>`}
-          </div>
-        </div>
-      </div>
-      <div class="detail-section"><h3>Abilities</h3>${abilitiesHtml}</div>
-      <div class="detail-section"><h3>Backstory</h3><p>${escapeHtml(c.bio) || '<span style="color:var(--ink-faint)">Nothing recorded yet.</span>'}</p></div>
-      ${c.notes ? `<div class="detail-section"><h3>Author Notes</h3><p>${escapeHtml(c.notes)}</p></div>` : ''}
-    `;
+    const tags = [];
+    ['role','status','faction'].forEach(id=>{
+      if(questions.some(q=>q.id===id) && c[id]) tags.push(escapeHtml(c[id]));
+    });
+    if(ageQ && c[ageQ.id] && c[ageQ.id] !== 'N/A') tags.push(escapeHtml(c[ageQ.id]));
+
+    let html = `<div class="detail-photo" style="${c.photo ? `background-image:url('${escapeAttr(c.photo)}')` : ''}">${c.photo ? '' : initials(c.name)}</div>`;
+    if(tags.length) html += `<div class="detail-tags">${tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>`;
+
+    if(c.alias) html += `<div class="detail-section"><h3>Alias</h3><p>${escapeHtml(c.alias)}</p></div>`;
+
+    const identityParts = [];
+    if(c.ageReal !== undefined && c.ageReal !== null && c.ageReal !== '') identityParts.push('Age: ' + escapeHtml(String(c.ageReal)));
+    if(c.gender) identityParts.push('Gender: ' + escapeHtml(c.gender));
+    if(c.eyeColor) identityParts.push('Eye color: ' + escapeHtml(c.eyeColor));
+    if(identityParts.length) html += `<div class="detail-section"><h3>Identity</h3><p>${identityParts.join(' · ')}</p></div>`;
+
+    if(c.languages && c.languages.length) html += `<div class="detail-section"><h3>Languages</h3><ul class="ability-list">${c.languages.map(l=>`<li>${escapeHtml(l)}</li>`).join('')}</ul></div>`;
+
+    if(c.city || c.district) html += `<div class="detail-section"><h3>Origin</h3><p>${escapeHtml([c.city,c.district].filter(Boolean).join(' · '))}</p></div>`;
+
+    if(c.entity){
+      const dyn = ageQ && c[ageQ.id] && controlDynamics[c[ageQ.id]] ? ' — ' + controlDynamics[c[ageQ.id]] : '';
+      html += `<div class="detail-section"><h3>Entity</h3><p>${escapeHtml(c.entity)}${dyn}</p></div>`;
+    }
+
+    if(questions.some(q=>q.type==='relations')){
+      html += `<div class="detail-section">${relationshipNetworkHtml(c)}</div>`;
+    }
+
+    if(c.abilities && c.abilities.length) html += `<div class="detail-section"><h3>Abilities</h3><ul class="ability-list">${c.abilities.map(a=>`<li>${escapeHtml(a)}</li>`).join('')}</ul></div>`;
+
+    if(c.bio) html += `<div class="detail-section"><h3>Backstory</h3><p>${escapeHtml(c.bio)}</p></div>`;
+
+    // Any remaining (custom, universe-specific) questions not already covered above.
+    questions.forEach(q=>{
+      if(HANDLED_DETAIL_IDS.has(q.id)) return;
+      html += renderQuestionValue(q, c);
+    });
+
+    if(c.notes) html += `<div class="detail-section"><h3>Author Notes</h3><p>${escapeHtml(c.notes)}</p></div>`;
+
+    document.getElementById('detailBody').innerHTML = html;
     detailOverlay.classList.add('open');
 
     document.querySelectorAll('.relation-link').forEach(link => {
@@ -979,42 +1480,62 @@
   });
 
   // ---------- filters ----------
-  [searchInput, roleFilter, statusFilter].forEach(el => el.addEventListener('input', render));
+  searchInput.addEventListener('input', render);
 
   // ---------- export / import ----------
-  document.getElementById('exportBtn').addEventListener('click', ()=>{
-    const blob = new Blob([JSON.stringify(characters, null, 2)], {type:'application/json'});
+  document.getElementById('exportBtn').addEventListener('click',()=>{
+    saveCurrentUniverse();
+    const blob = new Blob([JSON.stringify({version:2,activeUniverseId,universes}, null, 2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'totd-case-archive-' + new Date().toISOString().slice(0,10) + '.json';
+    a.download = 'case-archive-universes-' + new Date().toISOString().slice(0,10) + '.json';
     a.click();
     URL.revokeObjectURL(url);
-    showToast('Archive exported.');
+    showToast('Universe archive exported.');
   });
-  document.getElementById('importBtn').addEventListener('click', ()=> document.getElementById('importFile').click());
-  document.getElementById('importFile').addEventListener('change', (e)=>{
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
+  document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFile').click());
+  document.getElementById('importFile').addEventListener('change',(e)=>{
+    const file=e.target.files[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=()=>{
       try{
-        const incoming = JSON.parse(reader.result);
-        if(!Array.isArray(incoming)) throw new Error('not an array');
-        const merge = characters.length > 0 ? confirm('Merge with your current archive? Cancel to replace it entirely.') : true;
-        if(merge){
-          const existingIds = new Set(characters.map(c=>c.id));
-          incoming.forEach(c => { if(!existingIds.has(c.id)) characters.push(c); });
-        } else {
-          characters = incoming;
-        }
-        persist();
-        render();
-        showToast('Archive imported.');
-      }catch(err){
-        alert('That file could not be read as a case archive backup.');
-      }
-      e.target.value = '';
+        const incoming=JSON.parse(reader.result);
+        if(incoming && Array.isArray(incoming.universes)){
+          const replace=universes.length ? confirm('Replace your complete universe archive? Cancel to merge universes by ID.') : true;
+          if(replace){
+            universes=incoming.universes;
+            activeUniverseId=incoming.activeUniverseId || universes[0]?.id || 'totd';
+          }else{
+            const existing=new Set(universes.map(u=>u.id));
+            incoming.universes.forEach(u=>{if(!existing.has(u.id))universes.push(u);});
+          }
+          universes.forEach(ensureQuestions);
+          const u=activeUniverse();
+          characters=u?.characters||[];
+          applyTheme(u?.theme||'apple2');
+          normalizeCharacterData();
+          normalizeRelations();
+          persist();
+          renderUniverseButton();
+          renderFilters();
+          render();
+          showToast('Universe archive imported.');
+        }else if(Array.isArray(incoming)){
+          const u=activeUniverse();
+          ensureQuestions(u);
+          u.characters=incoming;
+          characters=incoming;
+          normalizeCharacterData();
+          normalizeRelations();
+          persist();
+          renderFilters();
+          render();
+          showToast('Character archive imported into current universe.');
+        }else throw new Error('invalid');
+      }catch(err){alert('That file could not be read as a case archive backup.');}
+      e.target.value='';
     };
     reader.readAsText(file);
   });
@@ -1033,6 +1554,8 @@
   loadCharacters();
   normalizeCharacterData();
   normalizeRelations();
+  renderUniverseButton();
+  renderFilters();
   render();
 })();
 </script>
