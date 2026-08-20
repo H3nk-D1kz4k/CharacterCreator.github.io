@@ -142,6 +142,8 @@
   }
   .stamp.status-active{ border-color:var(--accent-bright); color:var(--accent-bright); background:rgba(206, 151, 119, 0.06);}
   .stamp.status-unknown{ border-color:var(--ink-faint); color:var(--ink-faint); background:rgba(255,255,255,0.02);}
+  .stamp.status-deceased{ border-color:#ff3b3b; color:#ff5c5c; background:rgba(255,59,59,0.1); text-shadow:0 0 7px rgba(255,59,59,0.55);}
+  .stamp.status-missing{ border-color:#ffb347; color:#ffb347; background:rgba(255,179,71,0.08);}
 
   /* ---------- Modal shared ---------- */
   .overlay{
@@ -1132,7 +1134,7 @@
 
     const add = document.createElement('button');
     add.type = 'button';
-    add.className = 'btn-ghost';
+    add.className = 'btn-ghost add-relation';
     add.textContent = '+ Connect Character';
     add.addEventListener('click', () => addRelationRow('', 'Friend', wrap));
     wrap.appendChild(add);
@@ -1164,8 +1166,12 @@
 
     row.querySelector('.remove-relation').addEventListener('click', () => row.remove());
 
-    const addButton = wrap.querySelector('.btn-ghost:last-child');
-    wrap.insertBefore(row, addButton || null);
+    const addButton = wrap.querySelector('.add-relation');
+    if(addButton){
+      wrap.insertBefore(row, addButton);
+    } else {
+      wrap.appendChild(row);
+    }
   }
 
   function collectRelations(){
